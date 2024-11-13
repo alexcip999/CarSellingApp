@@ -46,7 +46,7 @@ import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.SignUp.toSignUp
 
 @Composable
-fun LoginHeader()  {
+fun LoginHeader() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -70,7 +70,7 @@ fun LoginFields(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onForgotPasswordClick: () -> Unit,
-)  {
+) {
     Column {
         TextField(
             value = email,
@@ -123,7 +123,7 @@ fun LoginFields(
 fun LoginFooter(
     onSignInClick: () -> Unit,
     onSignUpClick: () -> Unit,
-)  {
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -146,7 +146,7 @@ fun LoginFooter(
 }
 
 @Composable
-fun LoginScreen(navController: NavController)  {
+fun LoginScreen(navController: NavController) {
     val scrollState = rememberScrollState()
 
     Box(modifier = Modifier.fillMaxSize()) {

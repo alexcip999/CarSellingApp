@@ -6,7 +6,6 @@ sealed class Routes(
     val route: String,
 ) {
     data object MainRoute : Routes("mainRoutes") {
-
         data object Login : Routes("${MainRoute.route}/login") {
             fun NavController.toLogin() = navigate("${MainRoute.route}/login")
         }

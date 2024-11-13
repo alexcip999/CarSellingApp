@@ -1,14 +1,23 @@
 package com.example.car_sellingapp.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CardElevation
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,31 +25,121 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.car_sellingapp.DTO.CarDTO
 import com.example.car_sellingapp.R
 
 @Composable
-fun CarCard(
-    image: @Composable () -> Unit,
-    name: @Composable () -> Unit,
-    description: @Composable () -> Unit,
-    price: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun CarCard(car: CarDTO) {
     Card(
-        modifier = modifier.padding(8.dp),
-        // elevation = 4.dp,
+        shape = RoundedCornerShape(4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        modifier =
+            Modifier
+                .padding(16.dp)
+                .width(300.dp),
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            image()
-            name()
-            description()
-            price()
+        Column {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(180.dp),
+            ) {
+                Image(
+                    painter = car.image,
+                    contentDescription = "Image of car",
+                    modifier =
+                        Modifier
+                            .fillMaxSize(),
+                    contentScale = ContentScale.Crop,
+                )
+            }
+
+            Spacer(modifier = Modifier.padding(2.dp))
+            Row(
+                modifier = Modifier.padding(4.dp),
+            ) {
+                Text(
+                    text = car.model,
+                    fontSize = 16.sp,
+                    color = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                )
+            }
+            Column {
+                Row(
+                    modifier =
+                        Modifier
+                            .padding(start = 8.dp, end = 8.dp)
+                            .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Row {
+                        Text(
+                            text = car.kilometers.toString() + " KM",
+                            fontSize = 12.sp,
+                            color = Color.Black,
+                        )
+                    }
+                    Row {
+                        Text(
+                            text = car.transmission,
+                            fontSize = 12.sp,
+                            color = Color.Black,
+                        )
+                    }
+                    Row {
+                        Text(
+                            text = "condition: ",
+                            fontSize = 12.sp,
+                        )
+                        Text(
+                            text = car.condition,
+                            fontSize = 12.sp,
+                            color = Color.Black,
+                        )
+                    }
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceAround,
+                ) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "price: ",
+                            fontSize = 12.sp,
+                        )
+                        Text(
+                            text = car.price.toString() + " EUR",
+                            color = Color(0xFFFF4081),
+                        )
+                    }
+                    Row {
+                        Text(
+                            text = car.location,
+                            fontSize = 12.sp,
+                            color = Color.Black,
+                        )
+                    }
+
+                    IconButton(onClick = { /* TODO: Favorite action */ }) {
+                        Icon(
+                            imageVector = Icons.Default.FavoriteBorder,
+                            contentDescription = "Favorite Icon",
+                            tint = Color.Gray,
+                        )
+                    }
+                }
+            }
         }
     }
 }
@@ -49,86 +148,15 @@ fun CarCard(
 @Composable
 fun ExampleCarCard() {
     CarCard(
-        image = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = "Image of car",
-                modifier =
-                    Modifier
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                contentScale = ContentScale.Crop,
-            )
-        },
-        name = {
-            Text(
-                text = "Masina",
-                modifier = Modifier.padding(4.dp),
-                fontSize = 20.sp,
-            )
-        },
-        description = {
-            Text(
-                text = "masina cu multi cai putere",
-                modifier = Modifier.padding(4.dp),
-                fontSize = 12.sp,
-            )
-        },
-        price = {
-            Text(
-                text = "1000.00$",
-                modifier = Modifier.padding(8.dp),
-            )
-        },
-    )
-}
-
-@Composable
-fun MyCardComponent(
-    title: String = "",
-    content: @Composable () -> Unit,
-    padding: Dp,
-    backgroundColor: Color,
-    elevation: CardElevation,
-) {
-    Card(
-        modifier = Modifier.padding(padding),
-        elevation = elevation,
-        colors =
-            CardDefaults.cardColors(
-                containerColor = backgroundColor,
+        car =
+            CarDTO(
+                kilometers = "5.000",
+                model = "Mercedes G Class Brabus 2024",
+                transmission = "Automatic",
+                price = "324.900,00",
+                location = "Germany",
+                condition = "New",
+                image = painterResource(id = R.drawable.masina1),
             ),
-    ) {
-        if (!title.isEmpty()) {
-            Text(
-                text = title,
-                fontSize = 10.sp,
-            )
-        }
-        content()
-    }
-}
-
-@Preview
-@Composable
-fun PreviewMyCardComponent()  {
-    MyCardComponent(
-        content = {
-            ExampleCarCard()
-        },
-        padding = 10.dp,
-        elevation = CardDefaults.elevatedCardElevation(),
-        backgroundColor = Color.Cyan,
-    )
-}
-
-@Preview
-@Composable
-fun Component1()  {
-    MyCardComponent(
-        title = "Salutare",
-        content = {},
-        padding = 10.dp,
-        backgroundColor = Color.White,
-        elevation = CardDefaults.elevatedCardElevation(),
     )
 }
