@@ -72,7 +72,7 @@ fun SignUpScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = R.drawable.white),
             contentDescription = "SignUp",
             modifier =
                 Modifier

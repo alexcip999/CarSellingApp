@@ -124,7 +124,7 @@ fun ForgotPasswordFooter(onResetPassword: () -> Unit) {
 fun ForgotPasswordScreen(navController: NavController) {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = R.drawable.white),
             contentDescription = "Forgot Password",
             modifier =
                 Modifier
