@@ -1,6 +1,5 @@
 package com.example.car_sellingapp.screens
 
-import android.graphics.drawable.Icon
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,13 +23,10 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -47,9 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.car_sellingapp.DTO.CarDTO
 import com.example.car_sellingapp.R
 import com.example.car_sellingapp.components.CardSlider
+import com.example.car_sellingapp.screens.model.dto.CarDTO
 
 @Preview
 @Composable
@@ -156,18 +152,15 @@ fun HomeScreen() {
                     Spacer(modifier = Modifier.padding(8.dp))
                     CardSlider(cars2)
                 }
-                item{
+                item {
                     Spacer(modifier = Modifier.padding(8.dp))
                     CardSlider(cars1)
                 }
-                item{
+                item {
                     Spacer(modifier = Modifier.padding(8.dp))
                     CardSlider(cars1)
                 }
-
             }
-
-
         }
     }
 }

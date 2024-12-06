@@ -19,8 +19,8 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -65,7 +65,7 @@ fun ForgotPasswordFields(
     onNewPasswordChange: (String) -> Unit,
     onConfirmPassword: (String) -> Unit,
 ) {
-    TextField(
+    OutlinedTextField(
         value = newPassword,
         onValueChange = onNewPasswordChange,
         label = {
@@ -84,7 +84,7 @@ fun ForgotPasswordFields(
             ),
     )
     Spacer(modifier = Modifier.height(10.dp))
-    TextField(
+    OutlinedTextField(
         value = newPassword,
         onValueChange = onNewPasswordChange,
         label = {

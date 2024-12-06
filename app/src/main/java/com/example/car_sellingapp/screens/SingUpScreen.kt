@@ -13,21 +13,23 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -112,20 +114,22 @@ fun SignUpScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                val name = remember { mutableStateOf("") }
-                val email = remember { mutableStateOf("") }
+                val username = remember { mutableStateOf("") }
                 val password = remember { mutableStateOf("") }
+                val passwordConfirmation = remember { mutableStateOf("") }
 
                 SignUpHeader()
                 Spacer(modifier = Modifier.height(20.dp))
                 SignUpFields(
-                    email = email.value,
+                    navController = navController,
+                    username = username.value,
                     password = password.value,
-                    name = name.value,
-                    onEmailChange = { email.value = it },
+                    passwordConfirmation = passwordConfirmation.value,
+                    onUsernameChange = { username.value = it },
                     onPasswordChange = { password.value = it },
-                    onNameChange = { name.value = it },
+                    onPasswordConfirmationChange = { passwordConfirmation.value = it },
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
                 SignUpFooter(
                     onSignUpClick = {
@@ -142,25 +146,28 @@ fun SignUpScreen(navController: NavController) {
 
 @Composable
 fun SignUpFields(
-    email: String,
+    navController: NavController,
+    username: String,
     password: String,
-    name: String,
-    onEmailChange: (String) -> Unit,
+    passwordConfirmation: String,
+    onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
-    onNameChange: (String) -> Unit,
+    onPasswordConfirmationChange: (String) -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     Column {
-        TextField(
-            value = name,
-            onValueChange = onNameChange,
+        OutlinedTextField(
+            value = username,
+            onValueChange = onUsernameChange,
             label = {
-                Text("Name")
+                Text("Username")
             },
             placeholder = {
-                Text("Enter your name")
+                Text("Enter your username")
             },
             leadingIcon = {
-                Icon(Icons.Default.Person, contentDescription = "Name")
+                Icon(Icons.Default.Person, contentDescription = "Username")
             },
             keyboardOptions =
                 KeyboardOptions(
@@ -169,26 +176,7 @@ fun SignUpFields(
                 ),
         )
         Spacer(modifier = Modifier.height(10.dp))
-        TextField(
-            value = email,
-            label = {
-                Text("Email")
-            },
-            placeholder = {
-                Text("Enter your email")
-            },
-            onValueChange = onEmailChange,
-            leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = "Email")
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        TextField(
+        OutlinedTextField(
             value = password,
             label = {
                 Text("Password")
@@ -198,13 +186,36 @@ fun SignUpFields(
             },
             onValueChange = onPasswordChange,
             visualTransformation = PasswordVisualTransformation(),
+            leadingIcon = {
+                Icon(Icons.Default.Lock, contentDescription = "Password")
+            },
             keyboardOptions =
                 KeyboardOptions(
                     keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Go,
+                    imeAction = ImeAction.Next,
                 ),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        OutlinedTextField(
+            value = passwordConfirmation,
+            label = {
+                Text("Confirm Password")
+            },
+            placeholder = {
+                Text("Repeat your password")
+            },
+            onValueChange = onPasswordConfirmationChange,
+            visualTransformation = PasswordVisualTransformation(),
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Done,
+                ),
+            keyboardActions =
+                KeyboardActions(onDone = {
+                }),
             leadingIcon = {
-                Icon(Icons.Default.Lock, contentDescription = "Password")
+                Icon(Icons.Default.Check, contentDescription = "Confirmation Password")
             },
         )
     }

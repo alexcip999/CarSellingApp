@@ -29,8 +29,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.car_sellingapp.DTO.CarDTO
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.screens.model.dto.CarDTO
 
 @Composable
 fun CarCard(car: CarDTO) {

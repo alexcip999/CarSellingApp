@@ -2,9 +2,6 @@ package com.example.car_sellingapp.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -19,7 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.car_sellingapp.DTO.CarDTO
+import com.example.car_sellingapp.screens.model.dto.CarDTO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -28,7 +25,6 @@ fun CardSlider(cards: List<CarDTO>) {
     var currentCardIndex by remember { mutableStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
     var coroutineScope = rememberCoroutineScope()
-
 
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
@@ -58,5 +54,3 @@ fun CardSlider(cards: List<CarDTO>) {
         }
     }
 }
-
-
