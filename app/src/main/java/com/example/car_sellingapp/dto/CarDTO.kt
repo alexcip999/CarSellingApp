@@ -1,6 +1,7 @@
-package com.example.car_sellingapp.screens.model.dto
+package com.example.car_sellingapp.dto
 
 import androidx.compose.ui.graphics.painter.Painter
+
 
 data class CarDTO(
     val kilometers: String,

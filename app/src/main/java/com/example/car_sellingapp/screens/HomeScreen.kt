@@ -45,7 +45,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.car_sellingapp.R
 import com.example.car_sellingapp.components.CardSlider
-import com.example.car_sellingapp.screens.model.dto.CarDTO
+import com.example.car_sellingapp.dto.CarDTO
 
 @Preview
 @Composable

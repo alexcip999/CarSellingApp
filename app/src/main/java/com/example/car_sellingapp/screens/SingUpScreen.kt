@@ -27,6 +27,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,6 +48,13 @@ import androidx.navigation.NavController
 import com.example.car_sellingapp.R
 import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.Login.toLogin
+import com.example.car_sellingapp.model.Client
+import com.example.car_sellingapp.model.RegisterRequest
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
 
 @Composable
 fun SignUpHeader() {
@@ -69,6 +77,7 @@ fun SignUpHeader() {
 @Composable
 fun SignUpScreen(navController: NavController) {
     val scrollState = rememberScrollState()
+    val scope = rememberCoroutineScope()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -136,6 +145,8 @@ fun SignUpScreen(navController: NavController) {
                         navController.toHome()
                     },
                     onSignInClick = {
+
+
                         navController.toLogin()
                     },
                 )
@@ -143,6 +154,8 @@ fun SignUpScreen(navController: NavController) {
         }
     }
 }
+
+
 
 @Composable
 fun SignUpFields(
@@ -154,7 +167,6 @@ fun SignUpFields(
     onPasswordChange: (String) -> Unit,
     onPasswordConfirmationChange: (String) -> Unit,
 ) {
-    val coroutineScope = rememberCoroutineScope()
 
     Column {
         OutlinedTextField(
@@ -213,6 +225,7 @@ fun SignUpFields(
                 ),
             keyboardActions =
                 KeyboardActions(onDone = {
+                    navController.toHome()
                 }),
             leadingIcon = {
                 Icon(Icons.Default.Check, contentDescription = "Confirmation Password")

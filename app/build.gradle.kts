@@ -1,9 +1,10 @@
-val ktor_version: String by project
-val logback_version: String by project
+val ktorVersion: String by project
+val logbackVersion: String by project
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     id("org.jetbrains.kotlin.plugin.serialization") version "2.1.0"
 }
 
@@ -82,19 +83,60 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.accompanist.navigation.animation)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+    implementation(libs.lifecycle.runtime.ktx.v251)
+    implementation(libs.lifecycle.viewmodel.compose)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-    implementation("com.google.dagger:hilt-android:2.44")
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
 
-    implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.serialization.json)
 
-    implementation("ch.qos.logback:logback-classic:$logback_version")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
 
-    implementation("io.ktor:ktor-client-android:1.5.0")
-    implementation("io.ktor:ktor-client-serialization:2.3.1")
-    implementation("io.ktor:ktor-client-logging-jvm:1.5.0")
+    implementation(libs.retrofit2.retrofit.v29)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+
+    // new dependency
+    implementation(libs.ui.tooling)
+    implementation(libs.androidx.lifecycle.runtime.ktx.v287)
+    implementation(libs.androidx.lifecycle.viewmodel.compose.v251)
+
+    implementation(libs.kotlinx.coroutines.android.v164)
+    implementation(libs.kotlinx.serialization.json.v133)
+
+    implementation(libs.hilt.android)
+
+    implementation(libs.ktor.client.android.v150)
+    implementation(libs.ktor.client.serialization.v150)
+    implementation(libs.ktor.client.logging.jvm.v150)
+
+    implementation(libs.material3)
+    implementation(libs.coil.compose)
+
+    implementation(libs.ktor.client.json)
+    implementation(libs.ktor.client.serialization)
+
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation.v2xx) // Optional, for JSON serialization
+    implementation(libs.ktor.client.logging) // Optional, for logging HTTP requests
+
+
+
+    // end new dependency
+
+
+
+    implementation(libs.logback.classic)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging.jvm)
 }

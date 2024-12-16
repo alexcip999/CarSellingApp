@@ -18,9 +18,11 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -72,26 +74,26 @@ fun LoginFields(
     onForgotPasswordClick: () -> Unit,
 ) {
     Column {
-        TextField(
+        OutlinedTextField(
             value = email,
             onValueChange = onEmailChange,
             label = {
-                Text("Email")
+                Text("Username")
             },
             placeholder = {
-                Text("Enter your email address")
+                Text("Enter your username")
             },
             leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = "Email")
+                Icon(Icons.Default.Person, contentDescription = "Username")
             },
             keyboardOptions =
                 KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
+                    keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
                 ),
         )
         Spacer(modifier = Modifier.height(10.dp))
-        TextField(
+        OutlinedTextField(
             value = password,
             label = {
                 Text("Password")
