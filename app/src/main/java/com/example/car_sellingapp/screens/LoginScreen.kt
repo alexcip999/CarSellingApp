@@ -27,7 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,9 +45,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.car_sellingapp.data.remote.dto.BaseResponse
+import com.example.car_sellingapp.data.remote.dto.GetUsersResponse
+import com.example.car_sellingapp.data.remote.dto.LoginRequest
+import com.example.car_sellingapp.data.remote.dto.LoginResponse
 import com.example.car_sellingapp.screens.Routes.MainRoute.ForgotPassword.toForgotPassword
 import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.SignUp.toSignUp
+import com.example.myapplication.data.remote.PostsService
 
 @Composable
 fun LoginHeader() {
@@ -150,6 +157,7 @@ fun LoginFooter(
 @Composable
 fun LoginScreen(navController: NavController) {
     val scrollState = rememberScrollState()
+    val service = PostsService.create()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -193,23 +201,38 @@ fun LoginScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                val email = remember { mutableStateOf("") }
+                val username = remember { mutableStateOf("") }
                 val password = remember { mutableStateOf("") }
 
                 LoginHeader()
                 Spacer(modifier = Modifier.height(20.dp))
                 LoginFields(
-                    email = email.value,
+                    email = username.value,
                     password = password.value,
-                    onEmailChange = { email.value = it },
+                    onEmailChange = { username.value = it },
                     onPasswordChange = { password.value = it },
                     onForgotPasswordClick = {
                         navController.toForgotPassword()
                     },
                 )
+
+
                 LoginFooter(
                     onSignInClick = {
-                        navController.toHome()
+                        val loginRequest = LoginRequest(
+                            username = username.value,
+                            password = password.value
+                        )
+                        val loginResponse = produceState<BaseResponse>(
+                            initialValue = BaseResponse("Error", "Error"),
+                            producer = {
+                                value = service.login(loginRequest)
+                            }
+                        )
+                        if(loginResponse.value.message.equals("Success")){
+                            navController.toHome()
+                        }
+
                     },
                     onSignUpClick = {
                         navController.toSignUp()

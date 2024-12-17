@@ -1,16 +1,23 @@
 package com.example.myapplication.data.remote
 
 import com.example.car_sellingapp.data.remote.PostsServiceImpl
-import com.example.car_sellingapp.data.remote.dto.GetUsersRequest
+import com.example.car_sellingapp.data.remote.dto.BaseResponse
 import com.example.car_sellingapp.data.remote.dto.GetUsersResponse
+import com.example.car_sellingapp.data.remote.dto.LoginRequest
+import com.example.car_sellingapp.data.remote.dto.LoginResponse
 import com.example.car_sellingapp.data.remote.dto.PostRequest
 import com.example.car_sellingapp.data.remote.dto.PostResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
+import io.ktor.client.plugins.DefaultRequest
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.header
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 
 interface PostsService {
@@ -21,6 +28,8 @@ interface PostsService {
 
     suspend fun getUsers(): List<GetUsersResponse>
 
+    suspend fun login(loginRequest: LoginRequest): BaseResponse
+
     companion object {
         fun create(): PostsService{
             return PostsServiceImpl(
@@ -28,8 +37,16 @@ interface PostsService {
                     install(Logging){
                         level = LogLevel.ALL
                     }
-                    install(ContentNegotiation){
-                        json()
+
+                    install(DefaultRequest) {
+                        header(HttpHeaders.ContentType, ContentType.Application.Json)
+                    }
+
+                    install(ContentNegotiation) {
+                        json(Json {
+                            ignoreUnknownKeys = true
+                            prettyPrint = true
+                        })
                     }
                 }
             )
