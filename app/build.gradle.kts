@@ -87,56 +87,17 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
 
     implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation("io.ktor:ktor-client-core:$ktorVersion")
-    implementation("io.ktor:ktor-client-cio:$ktorVersion")
-
-    implementation(libs.retrofit2.retrofit.v29)
-    implementation(libs.converter.gson)
-    implementation(libs.logging.interceptor)
 
     // new dependency
-    implementation(libs.ui.tooling)
-    implementation(libs.androidx.lifecycle.runtime.ktx.v287)
-    implementation(libs.androidx.lifecycle.viewmodel.compose.v251)
 
-    implementation(libs.kotlinx.coroutines.android.v164)
-    implementation(libs.kotlinx.serialization.json.v133)
+    implementation("io.ktor:ktor-client-core:3.0.1")
+    implementation("io.ktor:ktor-client-android:3.0.1")
+    implementation("io.ktor:ktor-client-serialization:3.0.1")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:3.0.1")
+    implementation("io.ktor:ktor-client-logging:3.0.1")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
 
-    implementation(libs.hilt.android)
-
-    implementation(libs.ktor.client.android.v150)
-    implementation(libs.ktor.client.serialization.v150)
-    implementation(libs.ktor.client.logging.jvm.v150)
-
-    implementation(libs.material3)
-    implementation(libs.coil.compose)
-
-    implementation(libs.ktor.client.json)
-    implementation(libs.ktor.client.serialization)
-
-    implementation(libs.kotlinx.serialization.json)
-
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.content.negotiation.v2xx) // Optional, for JSON serialization
-    implementation(libs.ktor.client.logging) // Optional, for logging HTTP requests
-
-
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // end new dependency
-
-
-
-    implementation(libs.logback.classic)
-
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
-
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.logging.jvm)
 }

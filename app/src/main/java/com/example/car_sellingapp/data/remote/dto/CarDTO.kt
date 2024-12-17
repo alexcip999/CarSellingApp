@@ -1,4 +1,4 @@
-package com.example.car_sellingapp.dto
+package com.example.car_sellingapp.data.remote.dto
 
 import androidx.compose.ui.graphics.painter.Painter
 
