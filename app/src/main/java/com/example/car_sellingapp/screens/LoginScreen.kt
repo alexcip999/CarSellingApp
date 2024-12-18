@@ -157,7 +157,6 @@ fun LoginFooter(
 @Composable
 fun LoginScreen(navController: NavController) {
     val scrollState = rememberScrollState()
-    val service = PostsService.create()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -219,20 +218,7 @@ fun LoginScreen(navController: NavController) {
 
                 LoginFooter(
                     onSignInClick = {
-                        val loginRequest = LoginRequest(
-                            username = username.value,
-                            password = password.value
-                        )
-                        val loginResponse = produceState<BaseResponse>(
-                            initialValue = BaseResponse("Error", "Error"),
-                            producer = {
-                                value = service.login(loginRequest)
-                            }
-                        )
-                        if(loginResponse.value.message.equals("Success")){
-                            navController.toHome()
-                        }
-
+                        navController.toHome()
                     },
                     onSignUpClick = {
                         navController.toSignUp()
