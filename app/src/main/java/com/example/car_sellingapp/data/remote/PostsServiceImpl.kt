@@ -7,6 +7,7 @@ import com.example.car_sellingapp.data.remote.dto.LoginRequest
 import com.example.car_sellingapp.data.remote.dto.LoginResponse
 import com.example.car_sellingapp.data.remote.dto.PostRequest
 import com.example.car_sellingapp.data.remote.dto.PostResponse
+import com.example.car_sellingapp.model.RegisterRequest
 import com.example.myapplication.data.remote.PostsService
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -88,6 +89,29 @@ class PostsServiceImpl(
                 url(HttpRoutes.LOGIN)
                 contentType(ContentType.Application.Json)
                 setBody(loginRequest)
+            }.body<BaseResponse>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error1", "Error")
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error2", "Error")
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error3", "Error")
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            BaseResponse("${e.message}", "Error")
+        }
+    }
+
+    override suspend fun register(registerRequest: RegisterRequest): BaseResponse {
+        return try {
+            client.post{
+                url(HttpRoutes.REGISTER)
+                contentType(ContentType.Application.Json)
+                setBody(registerRequest)
             }.body<BaseResponse>()
 
         } catch (e: RedirectResponseException) {

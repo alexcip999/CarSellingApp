@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -28,6 +29,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -44,11 +47,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.car_sellingapp.data.remote.dto.BaseResponse
 import com.example.car_sellingapp.data.remote.dto.GetUsersResponse
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
 import com.example.car_sellingapp.data.remote.dto.LoginResponse
+import com.example.car_sellingapp.model.AppViewModel
 import com.example.car_sellingapp.screens.Routes.MainRoute.ForgotPassword.toForgotPassword
 import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.SignUp.toSignUp
@@ -74,18 +79,24 @@ fun LoginHeader() {
 
 @Composable
 fun LoginFields(
-    email: String,
-    password: String,
-    onEmailChange: (String) -> Unit,
+    currentUsername: String,
+    currentPassword: String,
+    onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onForgotPasswordClick: () -> Unit,
+    onKeyboardDone: () -> Unit,
+    isLoginWrong: Boolean
 ) {
     Column {
         OutlinedTextField(
-            value = email,
-            onValueChange = onEmailChange,
+            value = currentUsername,
+            onValueChange = onUsernameChange,
             label = {
-                Text("Username")
+                if (isLoginWrong){
+                    Text("Wrong Password")
+                }else{
+                    Text("Username")
+                }
             },
             placeholder = {
                 Text("Enter your username")
@@ -98,12 +109,18 @@ fun LoginFields(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
                 ),
+            isError = isLoginWrong
         )
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
-            value = password,
+            value = currentPassword,
             label = {
-                Text("Password")
+                if (isLoginWrong){
+                    Text("Wrong Password")
+                }else{
+                    Text("Password")
+                }
+
             },
             placeholder = {
                 Text("Enter your password")
@@ -113,11 +130,15 @@ fun LoginFields(
             keyboardOptions =
                 KeyboardOptions(
                     keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Go,
+                    imeAction = ImeAction.Done,
                 ),
+            keyboardActions = KeyboardActions(
+                onDone = { onKeyboardDone() }
+            ),
             leadingIcon = {
                 Icon(Icons.Default.Lock, contentDescription = "Password")
             },
+            isError = isLoginWrong
         )
         TextButton(
             onClick = onForgotPasswordClick,
@@ -155,8 +176,13 @@ fun LoginFooter(
 }
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController,
+    appViewModel: AppViewModel = viewModel()
+) {
     val scrollState = rememberScrollState()
+    val appUiState by appViewModel.uiState.collectAsState()
+
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -200,25 +226,27 @@ fun LoginScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                val username = remember { mutableStateOf("") }
-                val password = remember { mutableStateOf("") }
 
                 LoginHeader()
                 Spacer(modifier = Modifier.height(20.dp))
                 LoginFields(
-                    email = username.value,
-                    password = password.value,
-                    onEmailChange = { username.value = it },
-                    onPasswordChange = { password.value = it },
+                    currentUsername = appViewModel.loginUsername,
+                    currentPassword = appViewModel.loginPassword,
+                    onUsernameChange = { appViewModel.updateUsername(it)},
+                    onPasswordChange = {appViewModel.updatePassword(it)},
                     onForgotPasswordClick = {
                         navController.toForgotPassword()
                     },
+                    onKeyboardDone = {
+                        appViewModel.loginUser(navController)
+                    },
+                    isLoginWrong = appUiState.isLoginWrong
                 )
 
 
                 LoginFooter(
                     onSignInClick = {
-                        navController.toHome()
+                        appViewModel.loginUser(navController)
                     },
                     onSignUpClick = {
                         navController.toSignUp()

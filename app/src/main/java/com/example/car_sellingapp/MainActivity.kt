@@ -41,29 +41,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
         setContent {
-//            val users = produceState<List<GetUsersResponse>>(
-//                initialValue = emptyList(),
-//                producer = {
-//                    value = service.getUsers()
-//                }
-//            )
-//            val loginRequest = LoginRequest(
-//                username = "alex",
-//                password = "1234"
-//            )
-//            val loginResponse = produceState<BaseResponse>(
-//                initialValue = BaseResponse("Error", "Error"),
-//                producer = {
-//                    value = service.login(loginRequest)
-//                }
-//            )
             CarSellingAppTheme {
-                    MainNavigation()
-                //
-//                Column {
-//                    Spacer(modifier = Modifier.height(10.dp))
-//                    Text(loginResponse.value.toString())
-//                }
+                MainNavigation()
             }
         }
     }

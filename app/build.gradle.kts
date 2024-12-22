@@ -97,6 +97,8 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:3.0.1")
     implementation("ch.qos.logback:logback-classic:1.2.3")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
 
     // end new dependency

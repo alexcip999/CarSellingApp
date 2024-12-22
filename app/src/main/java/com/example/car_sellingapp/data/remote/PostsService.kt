@@ -7,6 +7,7 @@ import com.example.car_sellingapp.data.remote.dto.LoginRequest
 import com.example.car_sellingapp.data.remote.dto.LoginResponse
 import com.example.car_sellingapp.data.remote.dto.PostRequest
 import com.example.car_sellingapp.data.remote.dto.PostResponse
+import com.example.car_sellingapp.model.RegisterRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.DefaultRequest
@@ -29,6 +30,8 @@ interface PostsService {
     suspend fun getUsers(): List<GetUsersResponse>
 
     suspend fun login(loginRequest: LoginRequest): BaseResponse
+
+    suspend fun register(registerRequest: RegisterRequest) : BaseResponse
 
     companion object {
         fun create(): PostsService{
