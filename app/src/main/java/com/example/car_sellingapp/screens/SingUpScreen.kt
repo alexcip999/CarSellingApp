@@ -29,9 +29,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -49,7 +46,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
 import com.example.car_sellingapp.model.AppViewModel
-import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.Login.toLogin
 
 

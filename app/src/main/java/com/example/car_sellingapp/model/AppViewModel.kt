@@ -6,11 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
 import com.example.car_sellingapp.data.remote.dto.RegisterRequest
 import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.Login.toLogin
-import com.example.car_sellingapp.screens.Routes.MainRoute.SignUp.toSignUp
 import com.example.myapplication.data.remote.PostsService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,6 +59,29 @@ class AppViewModel : ViewModel() {
         registerPasswordConfirmation = passwordConfirmation
     }
 
+    var forgotPassUsername by mutableStateOf("")
+        private set
+
+    fun updateForgotPassUsername(username: String){
+        forgotPassUsername = username
+    }
+
+    var forgotPassNewPassword by mutableStateOf("")
+        private set
+
+    fun updateForgotPassNewPassword(newPassword: String){
+        forgotPassNewPassword = newPassword
+    }
+
+    var forgotPassConfirmPassword by mutableStateOf("")
+        private set
+
+    fun updateForgotPassConfirmPassword(confirmPassword: String){
+        forgotPassConfirmPassword = confirmPassword
+    }
+
+
+
 
 
     fun loginUser(navController: NavController){
@@ -101,6 +124,29 @@ class AppViewModel : ViewModel() {
             }else{
                 _uiState.update { currentState ->
                     currentState.copy(isRegisterWrong = true)
+                }
+            }
+        }
+    }
+
+    fun forgotPassword(navController: NavController){
+        val forgotPasswordRequest = ForgotPasswordRequest(
+            username = forgotPassUsername,
+            password = forgotPassNewPassword,
+            passwordConfirmation = forgotPassConfirmPassword
+        )
+
+        viewModelScope.launch {
+            val forgotPassResponse = service.forgotPassword(forgotPasswordRequest)
+
+            if (forgotPassResponse.message == "Success"){
+                _uiState.update { currentState ->
+                    currentState.copy(isForgotPasswordWrong = false)
+                }
+                navController.toLogin()
+            }else{
+                _uiState.update { currentState ->
+                    currentState.copy(isForgotPasswordWrong = true)
                 }
             }
         }

@@ -1,14 +1,30 @@
 package com.example.car_sellingapp.data.remote.dto
 
-import androidx.compose.ui.graphics.painter.Painter
 
 
-data class CarDTO(
-    val kilometers: String,
-    val model: String,
-    val transmission: String, // enum -> Manual or Automatic
+data class CarDto(
+    // common id from the user who upload this car
+    val idUser: Int,
+    // details for card component
+    val year: String,
+    val km: String,
+    val combustible: CombustibleType,
+    val power: String,
+    val capacity: String,
     val price: String,
-    val location: String,
-    val condition: String,
-    val image: Painter,
+    // more details
+    val description: String,
+    val mark: String,
+    val color: String,
+    val seller: String,
 )
+
+enum class CombustibleType(private val displayName: String) {
+    GASOLINE("Gasoline"),
+    DIESEL("Diesel"),
+    ELECTRIC("Electric"),
+    HYBRID("Hybrid"),
+    BENZINE("Benzine");
+
+    override fun toString(): String = displayName
+}

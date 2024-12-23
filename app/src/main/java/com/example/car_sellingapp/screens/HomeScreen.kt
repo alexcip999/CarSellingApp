@@ -3,6 +3,7 @@ package com.example.car_sellingapp.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -44,8 +45,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.components.BottomBarComponent
+import com.example.car_sellingapp.components.CarDTO
 import com.example.car_sellingapp.components.CardSlider
-import com.example.car_sellingapp.data.remote.dto.CarDTO
+import com.example.car_sellingapp.components.SearchBar
 
 @Preview
 @Composable
@@ -111,20 +114,14 @@ fun HomeScreen() {
     cars2.add(card3)
     cars2.add(card4)
 
-    Column(
-        modifier =
+        Column(
+            modifier =
             Modifier
                 .padding(4.dp)
                 .fillMaxSize(),
-    ) {
-        Column(
-            modifier =
-                Modifier
-                    .padding(4.dp)
-                    .fillMaxSize(),
+            verticalArrangement = Arrangement.Top
         ) {
             val text = remember { mutableStateOf("") }
-            Spacer(modifier = Modifier.padding(16.dp))
             Text(
                 text = "Featured",
                 fontSize = 30.sp,
@@ -141,13 +138,15 @@ fun HomeScreen() {
             SearchBar(
                 text = text.value,
                 hint = "Search",
-                onSearchClicked = {
-                    println()
-                },
+                onSearchClicked = { },
                 onTextChange = { text.value = it },
             )
+
             Spacer(modifier = Modifier.padding(4.dp))
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier
+                    .height(650.dp)
+            ) {
                 item {
                     Spacer(modifier = Modifier.padding(8.dp))
                     CardSlider(cars2)
@@ -160,83 +159,18 @@ fun HomeScreen() {
                     Spacer(modifier = Modifier.padding(8.dp))
                     CardSlider(cars1)
                 }
+                item {
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    CardSlider(cars1)
+                }
+                item {
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    CardSlider(cars1)
+                }
             }
+            BottomBarComponent()
         }
-    }
+
+
 }
 
-@Composable
-fun SearchBar(
-    text: String,
-    hint: String,
-    modifier: Modifier = Modifier,
-    isEnabled: (Boolean) = true,
-    height: Dp = 40.dp,
-    elevation: Dp = 3.dp,
-    cornerShape: Shape = RoundedCornerShape(8.dp),
-    backgroundColor: Color = Color.White,
-    onSearchClicked: () -> Unit = {},
-    onTextChange: (String) -> Unit = {},
-) {
-    // var text = remember { mutableStateOf("") }
-    Row(
-        modifier =
-            Modifier
-                .height(height)
-                .fillMaxWidth()
-                .shadow(elevation = elevation, shape = cornerShape)
-                .background(color = backgroundColor, shape = cornerShape)
-                .clickable { onSearchClicked() },
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        BasicTextField(
-            modifier =
-                modifier
-                    .weight(5f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-            value = text,
-            onValueChange = onTextChange,
-            enabled = isEnabled,
-            textStyle =
-                TextStyle(
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                ),
-            decorationBox = { innerTextField ->
-                if (text.isEmpty()) {
-                    Text(
-                        text = hint,
-                        color = Color.Gray.copy(alpha = 0.5f),
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
-                innerTextField()
-            },
-            keyboardOptions =
-                KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Search,
-                ),
-            keyboardActions = KeyboardActions(onSearch = { onSearchClicked() }),
-            singleLine = true,
-        )
-        Box(
-            modifier =
-                modifier
-                    .align(Alignment.CenterVertically)
-                    .weight(1f)
-                    .size(40.dp)
-                    .background(color = Color.Transparent, shape = CircleShape),
-            contentAlignment = Alignment.Center,
-        ) {
-            if (text.isEmpty()) {
-                Icon(Icons.Default.Search, contentDescription = "Search")
-            } else {
-                Icon(Icons.Default.Close, contentDescription = "Close")
-            }
-        }
-    }
-}

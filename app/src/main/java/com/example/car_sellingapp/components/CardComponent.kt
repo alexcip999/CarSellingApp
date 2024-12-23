@@ -23,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -30,7 +31,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.car_sellingapp.R
-import com.example.car_sellingapp.data.remote.dto.CarDTO
 
 @Composable
 fun CarCard(car: CarDTO) {
@@ -160,3 +160,13 @@ fun ExampleCarCard() {
             ),
     )
 }
+
+data class CarDTO(
+    val kilometers: String,
+    val model: String,
+    val transmission: String,
+    val price: String,
+    val location: String,
+    val condition: String,
+    val image: Painter,
+)

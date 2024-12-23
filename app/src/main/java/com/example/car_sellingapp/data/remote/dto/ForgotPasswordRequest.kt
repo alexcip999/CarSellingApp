@@ -1,0 +1,10 @@
+package com.example.car_sellingapp.data.remote.dto
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ForgotPasswordRequest(
+    val username: String,
+    val password: String,
+    val passwordConfirmation: String
+)
