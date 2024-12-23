@@ -6,9 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
-import com.example.car_sellingapp.data.remote.dto.BaseResponse
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
+import com.example.car_sellingapp.data.remote.dto.RegisterRequest
 import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
+import com.example.car_sellingapp.screens.Routes.MainRoute.Login.toLogin
+import com.example.car_sellingapp.screens.Routes.MainRoute.SignUp.toSignUp
 import com.example.myapplication.data.remote.PostsService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,16 +27,39 @@ class AppViewModel : ViewModel() {
     var loginUsername by mutableStateOf("")
         private set
 
-    var loginPassword by mutableStateOf("")
-        private set
-
-    fun updateUsername(username: String){
+    fun updateLoginUsername(username: String){
         loginUsername = username
     }
 
-    fun updatePassword(password: String){
+    var loginPassword by mutableStateOf("")
+        private set
+
+    fun updateLoginPassword(password: String){
         loginPassword = password
     }
+
+    var registerUsername by mutableStateOf("")
+        private set
+
+    fun updateRegisterUsername(username: String){
+        registerUsername = username
+    }
+
+    var registerPassword by mutableStateOf("")
+        private set
+
+    fun updateRegisterPassword(password: String){
+        registerPassword = password
+    }
+
+    var registerPasswordConfirmation by mutableStateOf("")
+        private set
+
+    fun updateRegisterPasswordConfirmation(passwordConfirmation: String){
+        registerPasswordConfirmation = passwordConfirmation
+    }
+
+
 
     fun loginUser(navController: NavController){
         val loginRequest = LoginRequest(
@@ -53,6 +78,29 @@ class AppViewModel : ViewModel() {
             }else{
                 _uiState.update { currentState ->
                     currentState.copy(isLoginWrong = true)
+                }
+            }
+        }
+    }
+
+    fun registerUser(navController: NavController) {
+        val registerRequest = RegisterRequest(
+            username = registerUsername,
+            password = registerPassword,
+            passwordConfirmation = registerPasswordConfirmation
+        )
+
+        viewModelScope.launch {
+            val registerResponse = service.register(registerRequest)
+
+            if (registerResponse.message == "Success"){
+                _uiState.update { currentState ->
+                    currentState.copy(isRegisterWrong = false)
+                }
+                navController.toLogin()
+            }else{
+                _uiState.update { currentState ->
+                    currentState.copy(isRegisterWrong = true)
                 }
             }
         }

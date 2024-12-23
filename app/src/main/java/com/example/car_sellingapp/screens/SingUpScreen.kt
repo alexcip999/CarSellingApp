@@ -27,7 +27,8 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -44,16 +45,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.model.AppViewModel
 import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.Login.toLogin
-import com.example.car_sellingapp.model.Client
-import com.example.car_sellingapp.model.RegisterRequest
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 @Composable
@@ -75,9 +72,12 @@ fun SignUpHeader() {
 }
 
 @Composable
-fun SignUpScreen(navController: NavController) {
+fun SignUpScreen(
+    navController: NavController,
+    appViewModel: AppViewModel = viewModel()
+) {
     val scrollState = rememberScrollState()
-    val scope = rememberCoroutineScope()
+    val appUiState by appViewModel.uiState.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -123,30 +123,27 @@ fun SignUpScreen(navController: NavController) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                val username = remember { mutableStateOf("") }
-                val password = remember { mutableStateOf("") }
-                val passwordConfirmation = remember { mutableStateOf("") }
-
                 SignUpHeader()
                 Spacer(modifier = Modifier.height(20.dp))
                 SignUpFields(
-                    navController = navController,
-                    username = username.value,
-                    password = password.value,
-                    passwordConfirmation = passwordConfirmation.value,
-                    onUsernameChange = { username.value = it },
-                    onPasswordChange = { password.value = it },
-                    onPasswordConfirmationChange = { passwordConfirmation.value = it },
+                    currentUsername = appViewModel.registerUsername,
+                    currentPassword = appViewModel.registerPassword,
+                    currentPasswordConfirmation = appViewModel.registerPasswordConfirmation,
+                    onUsernameChange = { appViewModel.updateRegisterUsername(it) },
+                    onPasswordChange = { appViewModel.updateRegisterPassword(it) },
+                    onPasswordConfirmationChange = { appViewModel.updateRegisterPasswordConfirmation(it) },
+                    onKeyboardDone = {
+                        appViewModel.registerUser(navController)
+                    },
+                    isRegisterWrong = appUiState.isRegisterWrong
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
                 SignUpFooter(
                     onSignUpClick = {
-                        navController.toHome()
+                        appViewModel.registerUser(navController)
                     },
                     onSignInClick = {
-
-
                         navController.toLogin()
                     },
                 )
@@ -159,21 +156,26 @@ fun SignUpScreen(navController: NavController) {
 
 @Composable
 fun SignUpFields(
-    navController: NavController,
-    username: String,
-    password: String,
-    passwordConfirmation: String,
+    currentUsername: String,
+    currentPassword: String,
+    currentPasswordConfirmation: String,
     onUsernameChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onPasswordConfirmationChange: (String) -> Unit,
+    onKeyboardDone: () -> Unit,
+    isRegisterWrong: Boolean
 ) {
 
     Column {
         OutlinedTextField(
-            value = username,
+            value = currentUsername,
             onValueChange = onUsernameChange,
             label = {
-                Text("Username")
+                if (isRegisterWrong){
+                    Text("Username exists or passwords don't match")
+                }else{
+                    Text("Username")
+                }
             },
             placeholder = {
                 Text("Enter your username")
@@ -186,12 +188,17 @@ fun SignUpFields(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Next,
                 ),
+            isError = isRegisterWrong
         )
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
-            value = password,
+            value = currentPassword,
             label = {
-                Text("Password")
+                if (isRegisterWrong){
+                    Text("Username exists or passwords don't match")
+                }else{
+                    Text("Password")
+                }
             },
             placeholder = {
                 Text("Enter your password")
@@ -206,12 +213,17 @@ fun SignUpFields(
                     keyboardType = KeyboardType.Password,
                     imeAction = ImeAction.Next,
                 ),
+            isError = isRegisterWrong
         )
         Spacer(modifier = Modifier.height(10.dp))
         OutlinedTextField(
-            value = passwordConfirmation,
+            value = currentPasswordConfirmation,
             label = {
-                Text("Confirm Password")
+                if (isRegisterWrong){
+                    Text("Username exists or passwords don't match")
+                }else{
+                    Text("Confirm Password")
+                }
             },
             placeholder = {
                 Text("Repeat your password")
@@ -225,11 +237,12 @@ fun SignUpFields(
                 ),
             keyboardActions =
                 KeyboardActions(onDone = {
-                    navController.toHome()
+                    onKeyboardDone()
                 }),
             leadingIcon = {
                 Icon(Icons.Default.Check, contentDescription = "Confirmation Password")
             },
+            isError = isRegisterWrong
         )
     }
 }

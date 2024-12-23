@@ -93,7 +93,7 @@ fun LoginFields(
             onValueChange = onUsernameChange,
             label = {
                 if (isLoginWrong){
-                    Text("Wrong Password")
+                    Text("Wrong Username or Password")
                 }else{
                     Text("Username")
                 }
@@ -116,7 +116,7 @@ fun LoginFields(
             value = currentPassword,
             label = {
                 if (isLoginWrong){
-                    Text("Wrong Password")
+                    Text("Wrong Password or Password")
                 }else{
                     Text("Password")
                 }
@@ -232,8 +232,8 @@ fun LoginScreen(
                 LoginFields(
                     currentUsername = appViewModel.loginUsername,
                     currentPassword = appViewModel.loginPassword,
-                    onUsernameChange = { appViewModel.updateUsername(it)},
-                    onPasswordChange = {appViewModel.updatePassword(it)},
+                    onUsernameChange = { appViewModel.updateLoginUsername(it)},
+                    onPasswordChange = {appViewModel.updateLoginPassword(it)},
                     onForgotPasswordClick = {
                         navController.toForgotPassword()
                     },

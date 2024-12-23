@@ -4,10 +4,9 @@ import com.example.car_sellingapp.data.remote.PostsServiceImpl
 import com.example.car_sellingapp.data.remote.dto.BaseResponse
 import com.example.car_sellingapp.data.remote.dto.GetUsersResponse
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
-import com.example.car_sellingapp.data.remote.dto.LoginResponse
 import com.example.car_sellingapp.data.remote.dto.PostRequest
 import com.example.car_sellingapp.data.remote.dto.PostResponse
-import com.example.car_sellingapp.model.RegisterRequest
+import com.example.car_sellingapp.data.remote.dto.RegisterRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.DefaultRequest
