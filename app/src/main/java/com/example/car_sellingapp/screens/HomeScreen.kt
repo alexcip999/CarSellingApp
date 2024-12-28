@@ -44,6 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.car_sellingapp.R
 import com.example.car_sellingapp.components.BottomBarComponent
 import com.example.car_sellingapp.components.CarDTO
@@ -52,7 +53,9 @@ import com.example.car_sellingapp.components.SearchBar
 
 @Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController
+) {
     Box(
         modifier =
             Modifier
@@ -168,7 +171,7 @@ fun HomeScreen() {
                     CardSlider(cars1)
                 }
             }
-            BottomBarComponent()
+            BottomBarComponent(navController)
         }
 
 

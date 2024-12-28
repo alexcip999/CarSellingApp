@@ -20,7 +20,10 @@ fun MainNavigation() {
             SignUpScreen(navController)
         }
         composable(route = Routes.MainRoute.Home.route) {
-            HomeScreen()
+            HomeScreen(navController)
+        }
+        composable(route = Routes.MainRoute.Profile.route) {
+            ProfileScreen(navController)
         }
     }
 }

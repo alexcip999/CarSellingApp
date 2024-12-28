@@ -21,5 +21,9 @@ sealed class Routes(
         data object Home : Routes("${MainRoute.route}/home") {
             fun NavController.toHome() = navigate("${MainRoute.route}/home")
         }
+
+        data object Profile : Routes("${MainRoute.route}/profile") {
+            fun NavController.toProfile() = navigate("${MainRoute.route}/profile")
+        }
     }
 }

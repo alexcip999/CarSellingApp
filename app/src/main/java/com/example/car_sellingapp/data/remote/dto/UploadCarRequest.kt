@@ -1,8 +1,6 @@
 package com.example.car_sellingapp.data.remote.dto
 
-
-
-data class CarDto(
+data class UploadCarRequest(
     // common id from the user who upload this car
     val idUser: Int,
     // details for card component
@@ -21,13 +19,3 @@ data class CarDto(
     val principalImageUri: String,         // URI for the principal image
     val secondaryImageUris: List<String>  // URIs for secondary images
 )
-
-enum class CombustibleType(private val displayName: String) {
-    GASOLINE("Gasoline"),
-    DIESEL("Diesel"),
-    ELECTRIC("Electric"),
-    HYBRID("Hybrid"),
-    BENZINE("Benzine");
-
-    override fun toString(): String = displayName
-}

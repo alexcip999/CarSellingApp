@@ -1,8 +1,6 @@
 package com.example.car_sellingapp.components
 
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,24 +15,26 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.screens.Routes.MainRoute.Profile.toProfile
 
 @Composable
-@Preview
-fun BottomBarComponent() {
+fun BottomBarComponent(
+    navController: NavController
+) {
     BottomAppBar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(4.dp),
         actions = {
-                IconButton(onClick = { }) {
-                    Icon(Icons.Filled.Person, contentDescription = "Localized description")
+                IconButton(onClick = { navController.toProfile() }) {
+                    Icon(Icons.Filled.Person, contentDescription = "Profile")
                 }
                 Spacer(modifier = Modifier.padding(18.dp))
                 IconButton(onClick = { }) {
-                    Icon(Icons.Filled.Home, contentDescription = "Go Home")
+                    Icon(Icons.Filled.Home, contentDescription = "Home")
                 }
                 Spacer(modifier = Modifier.padding(18.dp))
                 IconButton(onClick = { }) {
