@@ -5,4 +5,5 @@ object HttpRoutes {
     const val LOGIN = "http://192.168.0.119:8080/auth/login"
     const val REGISTER = "http://192.168.0.119:8080/auth/register"
     const val FORGOT = "http://192.168.0.119:8080/auth/forgot-password"
+    const val UPLOAD_CAR = "http://192.168.0.119:8080/cars/upload_car"
 }

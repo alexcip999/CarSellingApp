@@ -6,6 +6,7 @@ import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
 import com.example.car_sellingapp.data.remote.dto.GetUsersResponse
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
 import com.example.car_sellingapp.data.remote.dto.RegisterRequest
+import com.example.car_sellingapp.data.remote.dto.UploadCarRequest
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.DefaultRequest
@@ -28,6 +29,8 @@ interface PostsService {
     suspend fun register(registerRequest: RegisterRequest): BaseResponse
 
     suspend fun forgotPassword(forgotPasswordRequest: ForgotPasswordRequest): BaseResponse
+
+    suspend fun uploadCar(uploadCarRequest: UploadCarRequest): BaseResponse
 
     companion object {
         fun create(): PostsService {

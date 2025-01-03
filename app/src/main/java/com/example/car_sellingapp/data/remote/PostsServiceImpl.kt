@@ -6,6 +6,7 @@ import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
 import com.example.car_sellingapp.data.remote.dto.GetUsersResponse
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
 import com.example.car_sellingapp.data.remote.dto.RegisterRequest
+import com.example.car_sellingapp.data.remote.dto.UploadCarRequest
 import com.example.myapplication.data.remote.PostsService
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -95,6 +96,29 @@ class PostsServiceImpl(
                 url(HttpRoutes.FORGOT)
                 contentType(ContentType.Application.Json)
                 setBody(forgotPasswordRequest)
+            }.body<BaseResponse>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error1", "Error")
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error2", "Error")
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error3", "Error")
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            BaseResponse("${e.message}", "Error")
+        }
+    }
+
+    override suspend fun uploadCar(uploadCarRequest: UploadCarRequest): BaseResponse {
+        return try {
+            client.post{
+                url(HttpRoutes.UPLOAD_CAR)
+                contentType(ContentType.Application.Json)
+                setBody(uploadCarRequest)
             }.body<BaseResponse>()
 
         } catch (e: RedirectResponseException) {
