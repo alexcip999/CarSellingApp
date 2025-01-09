@@ -3,8 +3,13 @@ package com.example.car_sellingapp.data.remote
 import android.util.Log
 import com.example.car_sellingapp.data.remote.dto.BaseResponse
 import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
+import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
+import com.example.car_sellingapp.data.remote.dto.GetUserDetailsRequest
+import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
 import com.example.car_sellingapp.data.remote.dto.GetUsersResponse
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
+import com.example.car_sellingapp.data.remote.dto.ParamSaveDetailsAboutUser
+import com.example.car_sellingapp.data.remote.dto.ProfileResponse
 import com.example.car_sellingapp.data.remote.dto.RegisterRequest
 import com.example.car_sellingapp.data.remote.dto.UploadCarRequest
 import com.example.myapplication.data.remote.PostsService
@@ -133,6 +138,75 @@ class PostsServiceImpl(
         } catch (e: Exception) {
             println("Error: ${e.message}")
             BaseResponse("${e.message}", "Error")
+        }
+    }
+
+    override suspend fun getUserByUsername(findUserByUsername: GetUserByUsername): ProfileResponse {
+        return try {
+            client.post{
+                url(HttpRoutes.PROFILE)
+                contentType(ContentType.Application.Json)
+                setBody(findUserByUsername)
+            }.body<ProfileResponse>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            ProfileResponse()
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            ProfileResponse()
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            ProfileResponse()
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            ProfileResponse()
+        }
+    }
+
+    override suspend fun getDetailsAboutUser(getUserDetails: GetUserDetailsRequest): List<GetUserDetailsResponse?> {
+        return try {
+            client.post{
+                url(HttpRoutes.PROFILE_DETAILS)
+                contentType(ContentType.Application.Json)
+                setBody(getUserDetails)
+            }.body<List<GetUserDetailsResponse?>>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            emptyList()
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            emptyList()
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            emptyList()
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            emptyList()
+        }
+    }
+
+    override suspend fun saveDetailsAboutUser(params: ParamSaveDetailsAboutUser): BaseResponse {
+        return try {
+            client.post{
+                url(HttpRoutes.SAVE_DETAILS_PROFILE)
+                contentType(ContentType.Application.Json)
+                setBody(params)
+            }.body<BaseResponse>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error1", "Error")
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error2", "Error")
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error3", "Error")
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            BaseResponse("Error4", "Error")
         }
     }
 }

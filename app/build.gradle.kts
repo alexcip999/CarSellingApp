@@ -103,5 +103,11 @@ dependencies {
 
 
     implementation("androidx.compose.ui:ui:1.7.6")
+
+    implementation("androidx.activity:activity-ktx:1.7.2")
+
+    implementation("io.coil-kt:coil-compose:2.2.2")
+
+
     // end new dependency
 }

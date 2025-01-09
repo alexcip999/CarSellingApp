@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.car_sellingapp.model.AppUiState
 import com.example.car_sellingapp.model.AppViewModel
 import com.example.car_sellingapp.screens.Routes.MainRoute.ForgotPassword.toForgotPassword
 import com.example.car_sellingapp.screens.Routes.MainRoute.SignUp.toSignUp
@@ -166,10 +167,10 @@ fun LoginFooter(
 @Composable
 fun LoginScreen(
     navController: NavController,
-    appViewModel: AppViewModel = viewModel()
+    appViewModel: AppViewModel,
+    appUiState: AppUiState
 ) {
     val scrollState = rememberScrollState()
-    val appUiState by appViewModel.uiState.collectAsState()
 
 
     Box(modifier = Modifier.fillMaxSize()) {

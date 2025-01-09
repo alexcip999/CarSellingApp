@@ -45,6 +45,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.model.AppUiState
 import com.example.car_sellingapp.model.AppViewModel
 import com.example.car_sellingapp.screens.Routes.MainRoute.Login.toLogin
 
@@ -70,10 +71,10 @@ fun SignUpHeader() {
 @Composable
 fun SignUpScreen(
     navController: NavController,
-    appViewModel: AppViewModel = viewModel()
+    appViewModel: AppViewModel,
+    appUiState: AppUiState
 ) {
     val scrollState = rememberScrollState()
-    val appUiState by appViewModel.uiState.collectAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),

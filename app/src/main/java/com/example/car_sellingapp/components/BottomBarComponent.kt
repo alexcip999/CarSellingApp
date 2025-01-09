@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
 import com.example.car_sellingapp.screens.Routes.MainRoute.Profile.toProfile
+import com.example.car_sellingapp.screens.Routes.MainRoute.UploadCar.toUploadCar
 
 @Composable
 fun BottomBarComponent(
@@ -37,7 +38,7 @@ fun BottomBarComponent(
                     Icon(Icons.Filled.Home, contentDescription = "Home")
                 }
                 Spacer(modifier = Modifier.padding(18.dp))
-                IconButton(onClick = { }) {
+                IconButton(onClick = {navController.toUploadCar() }) {
                     Icon(Icons.Sharp.AddCircle, contentDescription = "Add new post")
                 }
                 Spacer(modifier = Modifier.padding(18.dp))

@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.model.AppUiState
 import com.example.car_sellingapp.model.AppViewModel
 
 @Composable
@@ -176,10 +177,10 @@ fun ForgotPasswordFooter(onResetPassword: () -> Unit) {
 @Composable
 fun ForgotPasswordScreen(
     navController: NavController,
-    appViewModel: AppViewModel = viewModel()
+    appViewModel: AppViewModel,
+    appUiState: AppUiState
 
 ) {
-    val appUiState by appViewModel.uiState.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(

@@ -25,5 +25,13 @@ sealed class Routes(
         data object Profile : Routes("${MainRoute.route}/profile") {
             fun NavController.toProfile() = navigate("${MainRoute.route}/profile")
         }
+
+        data object UpdateProfile : Routes("${MainRoute.route}/updateProfile") {
+            fun NavController.toUpdateProfile() = navigate("${MainRoute.route}/updateProfile")
+        }
+
+        data object UploadCar : Routes("${MainRoute.route}/uploadCar") {
+            fun NavController.toUploadCar() = navigate("${MainRoute.route}/uploadCar")
+        }
     }
 }

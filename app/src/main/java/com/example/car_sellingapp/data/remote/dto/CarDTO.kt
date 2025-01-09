@@ -22,7 +22,7 @@ data class CarDto(
     val secondaryImageUris: List<String>  // URIs for secondary images
 )
 
-enum class CombustibleType(private val displayName: String) {
+enum class CombustibleType(val displayName: String) {
     GASOLINE("Gasoline"),
     DIESEL("Diesel"),
     ELECTRIC("Electric"),
