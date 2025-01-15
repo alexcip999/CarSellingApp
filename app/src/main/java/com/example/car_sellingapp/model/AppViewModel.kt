@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.car_sellingapp.data.remote.dto.CarDTO
 import com.example.car_sellingapp.data.remote.dto.CombustibleType
 import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
 import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
@@ -186,6 +188,30 @@ class AppViewModel : ViewModel() {
         uploadDescription = description
     }
 
+    fun getAllCars(){
+        viewModelScope.launch {
+            val cars = service.getAllCars()
+            Log.d("Aici", cars.toString())
+            if (cars.isNotEmpty()){
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        allCars = cars
+                    )
+                }
+            }
+        }
+    }
+
+    fun setCurrentCar(car: CarDTO){
+        viewModelScope.launch {
+            _uiState.update { currentState ->
+                currentState.copy(
+                    currentCar = car
+                )
+            }
+        }
+    }
+
 
     fun uploadCar(navController: NavController){
 
@@ -237,6 +263,8 @@ class AppViewModel : ViewModel() {
 
         viewModelScope.launch {
             val loginResponse = service.login(loginRequest)
+            val cars = service.getAllCars()
+            Log.d("Aici", cars.toString())
             if (loginResponse.message == "Success"){
                 val getUserByUsername = service.getUserByUsername(
                     GetUserByUsername(loginUsername)
@@ -250,7 +278,8 @@ class AppViewModel : ViewModel() {
                             currentState.copy(
                                 isLoginWrong = false,
                                 currentUser = getUserByUsername,
-                                profileDetails = getDetailsAboutUser[0]
+                                profileDetails = getDetailsAboutUser[0],
+                                allCars = cars
                             )
                         }
                     }else{

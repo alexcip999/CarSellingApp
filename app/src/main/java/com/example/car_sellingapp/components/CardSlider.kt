@@ -16,11 +16,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.car_sellingapp.data.remote.dto.CarDTO
+import com.example.car_sellingapp.model.AppUiState
+import com.example.car_sellingapp.model.AppViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun CardSlider(cards: List<CarDTO>) {
+fun CardSlider(
+    cards: List<CarDTO>,
+    navController: NavController,
+    appViewModel: AppViewModel,
+    appUiState: AppUiState
+) {
     var currentCardIndex by remember { mutableStateOf(0) }
     var isAnimating by remember { mutableStateOf(false) }
     var coroutineScope = rememberCoroutineScope()
@@ -48,7 +57,7 @@ fun CardSlider(cards: List<CarDTO>) {
                             }
                         },
             ) {
-                CarCard(card)
+                CarCard(card, navController, appViewModel, appUiState)
             }
         }
     }

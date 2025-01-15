@@ -2,7 +2,9 @@ package com.example.myapplication.data.remote
 
 import com.example.car_sellingapp.data.remote.PostsServiceImpl
 import com.example.car_sellingapp.data.remote.dto.BaseResponse
+import com.example.car_sellingapp.data.remote.dto.CarDTO
 import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
+import com.example.car_sellingapp.data.remote.dto.GetAllCars
 import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsRequest
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
@@ -42,6 +44,8 @@ interface PostsService {
     suspend fun getDetailsAboutUser(getUserDetails: GetUserDetailsRequest): List<GetUserDetailsResponse?>
 
     suspend fun saveDetailsAboutUser(params: ParamSaveDetailsAboutUser): BaseResponse
+
+    suspend fun getAllCars(): List<CarDTO>
 
     companion object {
         fun create(): PostsService {

@@ -134,7 +134,7 @@ fun ProfileScreen(
 
         }
 
-        BottomBarComponent(navController)
+        BottomBarComponent(navController, appViewModel, appUiState)
     }
 
 }

@@ -18,12 +18,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.model.AppUiState
+import com.example.car_sellingapp.model.AppViewModel
+import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.Profile.toProfile
 import com.example.car_sellingapp.screens.Routes.MainRoute.UploadCar.toUploadCar
 
 @Composable
 fun BottomBarComponent(
-    navController: NavController
+    navController: NavController,
+    appViewModel: AppViewModel,
+    appUiState: AppUiState
 ) {
     BottomAppBar(
         modifier = Modifier
@@ -34,7 +39,10 @@ fun BottomBarComponent(
                     Icon(Icons.Filled.Person, contentDescription = "Profile")
                 }
                 Spacer(modifier = Modifier.padding(18.dp))
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    appViewModel.getAllCars()
+                    navController.toHome()
+                }) {
                     Icon(Icons.Filled.Home, contentDescription = "Home")
                 }
                 Spacer(modifier = Modifier.padding(18.dp))
@@ -48,8 +56,8 @@ fun BottomBarComponent(
                 Spacer(modifier = Modifier.padding(18.dp))
                 IconButton(onClick = { }) {
                     Icon(
-                        painterResource(R.drawable.chat_24dp_e8eaed_fill0_wght400_grad0_opsz24),
-                        contentDescription = "Chat"
+                        painterResource(R.drawable.car_tag_24dp_e8eaed_fill0_wght400_grad0_opsz24),
+                        contentDescription = "Your fav cars"
                     )
                 }
         },

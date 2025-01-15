@@ -26,7 +26,7 @@ fun MainNavigation() {
             SignUpScreen(navController, appViewModel, appUiState)
         }
         composable(route = Routes.MainRoute.Home.route) {
-            HomeScreen(navController)
+            HomeScreen(navController, appViewModel, appUiState)
         }
         composable(route = Routes.MainRoute.Profile.route) {
             ProfileScreen(navController, appViewModel, appUiState)
@@ -36,6 +36,9 @@ fun MainNavigation() {
         }
         composable(route = Routes.MainRoute.UploadCar.route) {
             UploadCarScreen(navController, appViewModel, appUiState)
+        }
+        composable(route = Routes.MainRoute.CarDetails.route) {
+            CarDetailsScreen(navController, appViewModel, appUiState)
         }
     }
 }

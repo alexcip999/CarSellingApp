@@ -2,9 +2,8 @@ package com.example.car_sellingapp.data.remote.dto
 
 import kotlinx.serialization.Serializable
 
-
 @Serializable
-data class CarDTO(
+data class GetAllCars(
     val idUser: Int,
     val year: String,
     val km: String,
@@ -20,13 +19,3 @@ data class CarDTO(
     val principalImageUri: String,
     val secondaryImageUris: List<String>
 )
-
-enum class CombustibleType(val displayName: String) {
-    GASOLINE("Gasoline"),
-    DIESEL("Diesel"),
-    ELECTRIC("Electric"),
-    HYBRID("Hybrid"),
-    BENZINE("Benzine");
-
-    override fun toString(): String = displayName
-}

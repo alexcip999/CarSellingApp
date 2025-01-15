@@ -2,7 +2,9 @@ package com.example.car_sellingapp.data.remote
 
 import android.util.Log
 import com.example.car_sellingapp.data.remote.dto.BaseResponse
+import com.example.car_sellingapp.data.remote.dto.CarDTO
 import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
+import com.example.car_sellingapp.data.remote.dto.GetAllCars
 import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsRequest
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
@@ -31,7 +33,6 @@ class PostsServiceImpl(
 
     override suspend fun getUsers(): List<GetUsersResponse> {
         return try {
-            val getResponse = client.get { url(HttpRoutes.GET_USERS) }
             client.get { url(HttpRoutes.GET_USERS) }.body<List<GetUsersResponse>>()
         } catch (e: RedirectResponseException) {
             println("Error: ${e.response.status.description}")
@@ -207,6 +208,28 @@ class PostsServiceImpl(
         } catch (e: Exception) {
             println("Error: ${e.message}")
             BaseResponse("Error4", "Error")
+        }
+    }
+
+    override suspend fun getAllCars(): List<CarDTO> {
+        return try {
+            client.get { url(HttpRoutes.GET_ALL_CARS) }.body<List<CarDTO>>()
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("1", e.message)
+            emptyList()
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("2", e.message)
+            emptyList()
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("3", e.message)
+            emptyList()
+        } catch (e: Exception) {
+            e.message?.let { Log.d("4", it) }
+            println("Error: ${e.message}")
+            emptyList()
         }
     }
 }

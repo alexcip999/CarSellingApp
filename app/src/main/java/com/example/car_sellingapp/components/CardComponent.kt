@@ -30,10 +30,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.car_sellingapp.R
+import com.example.car_sellingapp.data.remote.dto.CarDTO
+import com.example.car_sellingapp.data.remote.dto.CombustibleType
+import com.example.car_sellingapp.model.AppUiState
+import com.example.car_sellingapp.model.AppViewModel
+import com.example.car_sellingapp.screens.Routes.MainRoute.CarDetails.toCarDetails
 
 @Composable
-fun CarCard(car: CarDTO) {
+fun CarCard(
+    car: CarDTO,
+    navController: NavController,
+    appViewModel: AppViewModel,
+    appUiState: AppUiState
+) {
     Card(
         shape = RoundedCornerShape(4.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -41,6 +52,10 @@ fun CarCard(car: CarDTO) {
             Modifier
                 .padding(16.dp)
                 .width(300.dp),
+        onClick = {
+            appViewModel.setCurrentCar(car)
+            navController.toCarDetails()
+        }
     ) {
         Column {
             Box(
@@ -50,7 +65,7 @@ fun CarCard(car: CarDTO) {
                         .height(180.dp),
             ) {
                 Image(
-                    painter = car.image,
+                    painter = painterResource(R.drawable.masina1),
                     contentDescription = "Image of car",
                     modifier =
                         Modifier
@@ -64,7 +79,7 @@ fun CarCard(car: CarDTO) {
                 modifier = Modifier.padding(4.dp),
             ) {
                 Text(
-                    text = car.model,
+                    text = car.mark + " " + car.model,
                     fontSize = 16.sp,
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
@@ -81,25 +96,25 @@ fun CarCard(car: CarDTO) {
                 ) {
                     Row {
                         Text(
-                            text = car.kilometers.toString() + " KM",
+                            text = " KM: " + car.km.toString(),
                             fontSize = 12.sp,
                             color = Color.Black,
                         )
                     }
                     Row {
                         Text(
-                            text = car.transmission,
+                            text = "combustible: " + car.combustible.displayName,
                             fontSize = 12.sp,
                             color = Color.Black,
                         )
                     }
                     Row {
                         Text(
-                            text = "condition: ",
+                            text = "year: ",
                             fontSize = 12.sp,
                         )
                         Text(
-                            text = car.condition,
+                            text = car.year,
                             fontSize = 12.sp,
                             color = Color.Black,
                         )
@@ -125,7 +140,7 @@ fun CarCard(car: CarDTO) {
                     }
                     Row {
                         Text(
-                            text = car.location,
+                            text = "mark: " + car.mark,
                             fontSize = 12.sp,
                             color = Color.Black,
                         )
@@ -144,29 +159,4 @@ fun CarCard(car: CarDTO) {
     }
 }
 
-@Preview
-@Composable
-fun ExampleCarCard() {
-    CarCard(
-        car =
-            CarDTO(
-                kilometers = "5.000",
-                model = "Mercedes G Class Brabus 2024",
-                transmission = "Automatic",
-                price = "324.900,00",
-                location = "Germany",
-                condition = "New",
-                image = painterResource(id = R.drawable.masina1),
-            ),
-    )
-}
 
-data class CarDTO(
-    val kilometers: String,
-    val model: String,
-    val transmission: String,
-    val price: String,
-    val location: String,
-    val condition: String,
-    val image: Painter,
-)

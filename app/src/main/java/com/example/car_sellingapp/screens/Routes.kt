@@ -33,5 +33,9 @@ sealed class Routes(
         data object UploadCar : Routes("${MainRoute.route}/uploadCar") {
             fun NavController.toUploadCar() = navigate("${MainRoute.route}/uploadCar")
         }
+
+        data object CarDetails : Routes("${MainRoute.route}/carDetails") {
+            fun NavController.toCarDetails() = navigate("${MainRoute.route}/carDetails")
+        }
     }
 }

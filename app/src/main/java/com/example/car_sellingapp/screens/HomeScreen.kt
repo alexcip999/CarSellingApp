@@ -47,133 +47,73 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
 import com.example.car_sellingapp.components.BottomBarComponent
-import com.example.car_sellingapp.components.CarDTO
 import com.example.car_sellingapp.components.CardSlider
 import com.example.car_sellingapp.components.SearchBar
+import com.example.car_sellingapp.model.AppUiState
+import com.example.car_sellingapp.model.AppViewModel
 
-@Preview
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    appViewModel: AppViewModel,
+    appUiState: AppUiState
 ) {
     Box(
         modifier =
-            Modifier
-                .fillMaxSize(),
+        Modifier
+            .fillMaxSize(),
     ) {
         Image(
             painter = painterResource(id = R.drawable.white),
             contentDescription = "White Background",
             modifier =
-                Modifier
-                    .fillMaxSize(),
+            Modifier
+                .fillMaxSize(),
             contentScale = ContentScale.Crop,
         )
     }
-    val card1: CarDTO =
-        CarDTO(
-            kilometers = "5.000",
-            model = "Mercedes G Class Brabus 2024",
-            transmission = "Automatic",
-            price = "324.900,00",
-            location = "Germany",
-            condition = "New",
-            image = painterResource(id = R.drawable.masina1),
-        )
-    val card2: CarDTO =
-        CarDTO(
-            kilometers = "121.699",
-            model = "Mercedes-Benz GLS 400 d 4MATIC Aut.",
-            transmission = "Automatic",
-            price = "70.091,00",
-            location = "Romania",
-            condition = "Used",
-            image = painterResource(id = R.drawable.masina2),
-        )
-    val card3: CarDTO =
-        CarDTO(
-            kilometers = "19.300",
-            model = "Audi A5 Sportnack 35 TDI S tronic S line",
-            transmission = "Automatic",
-            price = "42.500,00",
-            location = "Romania",
-            condition = "Used",
-            image = painterResource(id = R.drawable.masina3),
-        )
-    val card4: CarDTO =
-        CarDTO(
-            kilometers = "265.000",
-            model = "Mercedes-Benz S 350 d BlueTEC 4M Long Aut",
-            transmission = "Automatic",
-            price = "27.500,00",
-            location = "Romania",
-            condition = "Used",
-            image = painterResource(id = R.drawable.masina4),
-        )
-    val cars1 = mutableListOf<CarDTO>()
-    val cars2 = mutableListOf<CarDTO>()
-    cars1.add(card1)
-    cars1.add(card2)
-    cars2.add(card3)
-    cars2.add(card4)
 
-        Column(
-            modifier =
-            Modifier
-                .padding(4.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Top
+    Column(
+        modifier =
+        Modifier
+            .padding(4.dp)
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top
+    ) {
+        val text = remember { mutableStateOf("") }
+        Text(
+            text = "Featured",
+            fontSize = 30.sp,
+            fontStyle = FontStyle.Italic,
+            fontWeight = FontWeight.SemiBold,
+            color = Color.Black,
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        Text(
+            text = "6.046 Cars for Sale in USA",
+            fontSize = 20.sp,
+        )
+        Spacer(modifier = Modifier.padding(4.dp))
+        SearchBar(
+            text = text.value,
+            hint = "Search",
+            onSearchClicked = { },
+            onTextChange = { text.value = it },
+        )
+
+        Spacer(modifier = Modifier.padding(4.dp))
+        LazyColumn(
+            modifier = Modifier
+                .height(650.dp)
         ) {
-            val text = remember { mutableStateOf("") }
-            Text(
-                text = "Featured",
-                fontSize = 30.sp,
-                fontStyle = FontStyle.Italic,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            Text(
-                text = "6.046 Cars for Sale in USA",
-                fontSize = 20.sp,
-            )
-            Spacer(modifier = Modifier.padding(4.dp))
-            SearchBar(
-                text = text.value,
-                hint = "Search",
-                onSearchClicked = { },
-                onTextChange = { text.value = it },
-            )
+                item {
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    CardSlider(appUiState.allCars, navController, appViewModel, appUiState)
+                }
 
-            Spacer(modifier = Modifier.padding(4.dp))
-            LazyColumn(
-                modifier = Modifier
-                    .height(650.dp)
-            ) {
-                item {
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    CardSlider(cars2)
-                }
-                item {
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    CardSlider(cars1)
-                }
-                item {
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    CardSlider(cars1)
-                }
-                item {
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    CardSlider(cars1)
-                }
-                item {
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    CardSlider(cars1)
-                }
-            }
-            BottomBarComponent(navController)
         }
-
-
+        BottomBarComponent(navController, appViewModel, appUiState)
+    }
 }
+
 

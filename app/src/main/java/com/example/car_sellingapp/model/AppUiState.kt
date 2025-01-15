@@ -1,5 +1,7 @@
 package com.example.car_sellingapp.model
 
+import com.example.car_sellingapp.data.remote.dto.CarDTO
+import com.example.car_sellingapp.data.remote.dto.GetAllCars
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
 import com.example.car_sellingapp.data.remote.dto.User
 
@@ -12,5 +14,9 @@ data class AppUiState(
 
     val currentUser: User? = null,
 
-    val profileDetails: GetUserDetailsResponse? = null
+    val profileDetails: GetUserDetailsResponse? = null,
+
+    val allCars: List<CarDTO> = emptyList(),
+
+    val currentCar: CarDTO? = null
 )
