@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -20,6 +21,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,8 +46,11 @@ fun CarCard(
     car: CarDTO,
     navController: NavController,
     appViewModel: AppViewModel,
-    appUiState: AppUiState
+    appUiState: AppUiState,
+    state: Boolean = false
 ) {
+    val isFavorited = remember { mutableStateOf(false) }
+    val isFav = remember { mutableStateOf(state) }
     Card(
         shape = RoundedCornerShape(4.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
@@ -146,11 +152,32 @@ fun CarCard(
                         )
                     }
 
-                    IconButton(onClick = { /* TODO: Favorite action */ }) {
+                    IconButton(onClick = {
+                        if (!isFav.value){
+                            if (isFavorited.value) {
+                                appViewModel.removeFavCar(car) // Handle unfavorite
+                            } else {
+                                appViewModel.addFavCars(car) // Handle favorite
+                            }
+                            isFavorited.value = !isFavorited.value // Toggle state
+                        }else{
+                            appViewModel.removeFavCar(car) // Handle unfavorite
+                            isFav.value = !isFav.value
+                        }
+
+                    }) {
                         Icon(
-                            imageVector = Icons.Default.FavoriteBorder,
-                            contentDescription = "Favorite Icon",
-                            tint = Color.Gray,
+                            imageVector = if (!isFav.value) {
+                                if (isFavorited.value) Icons.Default.Favorite else Icons.Default.FavoriteBorder
+                            }else{
+                                Icons.Default.Favorite
+                            },
+                            contentDescription = if (isFavorited.value) "Favorited Icon" else "Favorite Icon",
+                            tint = if(!isFav.value) {
+                                if (isFavorited.value) Color.Red else Color.Gray
+                            }else{
+                                Color.Red
+                            }
                         )
                     }
                 }

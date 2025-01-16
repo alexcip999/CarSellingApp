@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -51,6 +52,8 @@ import com.example.car_sellingapp.components.CardSlider
 import com.example.car_sellingapp.components.SearchBar
 import com.example.car_sellingapp.model.AppUiState
 import com.example.car_sellingapp.model.AppViewModel
+
+val listOfMarks = listOf("Toyota", "Audi", "BMW", "Mercedes-Benz", "Ford")
 
 @Composable
 fun HomeScreen(
@@ -95,10 +98,11 @@ fun HomeScreen(
         )
         Spacer(modifier = Modifier.padding(4.dp))
         SearchBar(
-            text = text.value,
+            text = appViewModel.searchCarsByMark,
             hint = "Search",
-            onSearchClicked = { },
-            onTextChange = { text.value = it },
+            onSearchClicked = { appViewModel.getCarsByMark()},
+            onTextChange = { appViewModel.updateSearchCarByMark(it) },
+            navController = navController
         )
 
         Spacer(modifier = Modifier.padding(4.dp))
@@ -106,10 +110,34 @@ fun HomeScreen(
             modifier = Modifier
                 .height(650.dp)
         ) {
-                item {
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    CardSlider(appUiState.allCars, navController, appViewModel, appUiState)
+            items(listOfMarks) { mark ->
+                Spacer(modifier = Modifier.padding(8.dp))
+                Text(
+                    text = "Mark: $mark",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                // Filter cars by mark and display in CardSlider
+                val filteredCars = appUiState.allCars.filter { car -> car.mark == mark }
+                if (filteredCars.isNotEmpty()) {
+                    CardSlider(
+                        cards = filteredCars,
+                        navController = navController,
+                        appViewModel = appViewModel,
+                        appUiState = appUiState
+                    )
+                } else {
+                    Text(
+                        text = "No cars available for $mark",
+                        fontSize = 16.sp,
+                        color = Color.Gray,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
                 }
+            }
 
         }
         BottomBarComponent(navController, appViewModel, appUiState)

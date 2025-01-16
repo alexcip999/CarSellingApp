@@ -11,6 +11,8 @@ data class AppUiState(
     val isForgotPasswordWrong: Boolean = false,
     val isUpdateWrong: Boolean = false,
     val isUploadCarWrong: Boolean = false,
+    val isFavWrong: Boolean = false,
+    val isFav: Boolean = false,
 
     val currentUser: User? = null,
 
@@ -18,5 +20,11 @@ data class AppUiState(
 
     val allCars: List<CarDTO> = emptyList(),
 
-    val currentCar: CarDTO? = null
+    val currentCar: CarDTO? = null,
+
+    val allFavCars: List<CarDTO> = emptyList(),
+
+    val yourPosts: List<CarDTO> = emptyList(),
+
+    val searchCarsByMark: List<CarDTO> = emptyList(),
 )

@@ -40,5 +40,14 @@ fun MainNavigation() {
         composable(route = Routes.MainRoute.CarDetails.route) {
             CarDetailsScreen(navController, appViewModel, appUiState)
         }
+        composable(route = Routes.MainRoute.FavoriteCars.route) {
+            FavScreen(navController, appViewModel, appUiState)
+        }
+        composable(route = Routes.MainRoute.YourPosts.route) {
+            YourPostsScreen(navController, appViewModel, appUiState)
+        }
+        composable(route = Routes.MainRoute.SearchCars.route) {
+            SearchCarsScreen(navController, appViewModel, appUiState)
+        }
     }
 }

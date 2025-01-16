@@ -5,6 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CarDTO(
+    val id: Int?,
     val idUser: Int,
     val year: String,
     val km: String,

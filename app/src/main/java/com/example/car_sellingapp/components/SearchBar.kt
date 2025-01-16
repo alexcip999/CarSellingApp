@@ -32,6 +32,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import com.example.car_sellingapp.screens.Routes.MainRoute.SearchCars.toSearchCars
 
 @Composable
 fun SearchBar(
@@ -45,6 +47,7 @@ fun SearchBar(
     backgroundColor: Color = Color.White,
     onSearchClicked: () -> Unit = {},
     onTextChange: (String) -> Unit = {},
+    navController: NavController
 ) {
     // var text = remember { mutableStateOf("") }
     Row(
@@ -88,7 +91,10 @@ fun SearchBar(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Search,
                 ),
-            keyboardActions = KeyboardActions(onSearch = { onSearchClicked() }),
+            keyboardActions = KeyboardActions(onSearch = {
+                onSearchClicked()
+                navController.toSearchCars()
+            }),
             singleLine = true,
         )
         Box(

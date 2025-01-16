@@ -37,5 +37,17 @@ sealed class Routes(
         data object CarDetails : Routes("${MainRoute.route}/carDetails") {
             fun NavController.toCarDetails() = navigate("${MainRoute.route}/carDetails")
         }
+
+        data object FavoriteCars : Routes("${MainRoute.route}/favoriteCars") {
+            fun NavController.toFavorite() = navigate("${MainRoute.route}/favoriteCars")
+        }
+
+        data object YourPosts : Routes("${MainRoute.route}/yourPosts") {
+            fun NavController.toYourPosts() = navigate("${MainRoute.route}/yourPosts")
+        }
+
+        data object SearchCars : Routes("${MainRoute.route}/searchCars") {
+            fun NavController.toSearchCars() = navigate("${MainRoute.route}/searchCars")
+        }
     }
 }

@@ -3,8 +3,12 @@ package com.example.myapplication.data.remote
 import com.example.car_sellingapp.data.remote.PostsServiceImpl
 import com.example.car_sellingapp.data.remote.dto.BaseResponse
 import com.example.car_sellingapp.data.remote.dto.CarDTO
+import com.example.car_sellingapp.data.remote.dto.FavsParam
 import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
 import com.example.car_sellingapp.data.remote.dto.GetAllCars
+import com.example.car_sellingapp.data.remote.dto.GetCarsByIdParam
+import com.example.car_sellingapp.data.remote.dto.GetCarsByMark
+import com.example.car_sellingapp.data.remote.dto.GetFavCarsById
 import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsRequest
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
@@ -46,6 +50,18 @@ interface PostsService {
     suspend fun saveDetailsAboutUser(params: ParamSaveDetailsAboutUser): BaseResponse
 
     suspend fun getAllCars(): List<CarDTO>
+
+    suspend fun addFavCar(param: FavsParam) : BaseResponse
+
+    suspend fun getAllFavCArs(param: GetFavCarsById): List<CarDTO>
+
+    suspend fun getCarsById(param: GetCarsByIdParam): List<CarDTO>
+
+    suspend fun removeFavCar(param: FavsParam) : BaseResponse
+
+    suspend fun isFav(param: FavsParam) : BaseResponse
+
+    suspend fun getCarsByMark(param: GetCarsByMark) : List<CarDTO>
 
     companion object {
         fun create(): PostsService {

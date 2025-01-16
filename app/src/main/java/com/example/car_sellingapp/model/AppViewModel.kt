@@ -10,7 +10,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.car_sellingapp.data.remote.dto.CarDTO
 import com.example.car_sellingapp.data.remote.dto.CombustibleType
+import com.example.car_sellingapp.data.remote.dto.FavsParam
 import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
+import com.example.car_sellingapp.data.remote.dto.GetCarsByIdParam
+import com.example.car_sellingapp.data.remote.dto.GetCarsByMark
+import com.example.car_sellingapp.data.remote.dto.GetFavCarsById
 import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsRequest
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
@@ -188,10 +192,133 @@ class AppViewModel : ViewModel() {
         uploadDescription = description
     }
 
+    var searchCarsByMark by mutableStateOf("")
+        private set
+
+    fun updateSearchCarByMark(mark: String){
+        searchCarsByMark = mark
+    }
+
+    fun getCarsByMark(){
+        val mark = GetCarsByMark(
+            mark = searchCarsByMark
+        )
+        viewModelScope.launch {
+            val searchCars = service.getCarsByMark(mark)
+            if (searchCars.isNotEmpty()){
+                _uiState.update { currentState ->
+                    currentState.copy(
+                        searchCarsByMark = searchCars
+                    )
+                }
+            }
+        }
+    }
+
+    fun getCarsById(){
+        val param = uiState.value.currentUser?.let {
+            GetCarsByIdParam(
+                userId = it.id
+            )
+        }
+
+        viewModelScope.launch {
+            val carsById = param?.let { service.getCarsById(it) }
+            Log.d("posts", carsById.toString())
+            if (carsById != null) {
+                if(carsById.isNotEmpty()){
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            yourPosts = carsById
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun removeFavCar(car: CarDTO){
+        val favsParam = car.id?.let {
+            uiState.value.currentUser?.let { it1 ->
+                FavsParam(
+                    userId = it1.id,
+                    carId = it
+                )
+            }
+        }
+        viewModelScope.launch {
+            val response = favsParam?.let { service.removeFavCar(it) }
+            if (response != null) {
+                if (response.message == "Success"){
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isFavWrong = false
+                        )
+                    }
+                }else{
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isFavWrong = true
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun isFav(car: CarDTO) {
+        val favsParam = car.id?.let {
+            uiState.value.currentUser?.let { it1 ->
+                FavsParam(
+                    userId = it1.id,
+                    carId = it
+                )
+            }
+        }
+
+        viewModelScope.launch {
+            val response = favsParam?.let { service.isFav(it) }
+            if (response != null) {
+                if (response.message == "Success"){
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isFav = true
+                        )
+                    }
+                }else{
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isFavWrong = false
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    fun getFavCars(){
+        val param = uiState.value.currentUser?.let {
+            GetFavCarsById(
+                userId = it.id
+            )
+        }
+        viewModelScope.launch {
+            val favCars = param?.let { service.getAllFavCArs(it) }
+            if (favCars != null) {
+                if (favCars.isNotEmpty()){
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            allFavCars = favCars
+                        )
+                    }
+                }
+            }
+        }
+    }
+
     fun getAllCars(){
         viewModelScope.launch {
             val cars = service.getAllCars()
-            Log.d("Aici", cars.toString())
             if (cars.isNotEmpty()){
                 _uiState.update { currentState ->
                     currentState.copy(
@@ -200,6 +327,36 @@ class AppViewModel : ViewModel() {
                 }
             }
         }
+    }
+
+    fun addFavCars(car: CarDTO){
+        val favsParam = car.id?.let {
+            uiState.value.currentUser?.let { it1 ->
+                FavsParam(
+                    userId = it1.id,
+                    carId = it
+                )
+            }
+        }
+        viewModelScope.launch {
+            val response = favsParam?.let { service.addFavCar(it) }
+            if (response != null) {
+                if (response.message == "Success"){
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isFavWrong = false
+                        )
+                    }
+                }else{
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                           isFavWrong = true
+                        )
+                    }
+                }
+            }
+        }
+
     }
 
     fun setCurrentCar(car: CarDTO){
@@ -264,7 +421,6 @@ class AppViewModel : ViewModel() {
         viewModelScope.launch {
             val loginResponse = service.login(loginRequest)
             val cars = service.getAllCars()
-            Log.d("Aici", cars.toString())
             if (loginResponse.message == "Success"){
                 val getUserByUsername = service.getUserByUsername(
                     GetUserByUsername(loginUsername)

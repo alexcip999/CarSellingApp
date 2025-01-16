@@ -3,8 +3,12 @@ package com.example.car_sellingapp.data.remote
 import android.util.Log
 import com.example.car_sellingapp.data.remote.dto.BaseResponse
 import com.example.car_sellingapp.data.remote.dto.CarDTO
+import com.example.car_sellingapp.data.remote.dto.FavsParam
 import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
 import com.example.car_sellingapp.data.remote.dto.GetAllCars
+import com.example.car_sellingapp.data.remote.dto.GetCarsByIdParam
+import com.example.car_sellingapp.data.remote.dto.GetCarsByMark
+import com.example.car_sellingapp.data.remote.dto.GetFavCarsById
 import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsRequest
 import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
@@ -229,6 +233,152 @@ class PostsServiceImpl(
         } catch (e: Exception) {
             e.message?.let { Log.d("4", it) }
             println("Error: ${e.message}")
+            emptyList()
+        }
+    }
+
+    override suspend fun addFavCar(param: FavsParam): BaseResponse {
+        return try {
+            client.post{
+                url(HttpRoutes.ADD_FAV_CAR)
+                contentType(ContentType.Application.Json)
+                setBody(param)
+            }.body<BaseResponse>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error1", "Error")
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error2", "Error")
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error3", "Error")
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            BaseResponse("Error4", "Error")
+        }
+    }
+
+    override suspend fun getAllFavCArs(param: GetFavCarsById): List<CarDTO> {
+        return try {
+            client.post{
+                url(HttpRoutes.GET_FAV_CARS)
+                contentType(ContentType.Application.Json)
+                setBody(param)
+            }.body<List<CarDTO>>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            emptyList()
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            emptyList()
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            emptyList()
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            emptyList()
+        }
+    }
+
+    override suspend fun getCarsById(param: GetCarsByIdParam): List<CarDTO> {
+        return try {
+            client.post{
+                url(HttpRoutes.GET_CARS_BY_ID)
+                contentType(ContentType.Application.Json)
+                setBody(param)
+            }.body<List<CarDTO>>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("Acolo", e.message)
+            emptyList()
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("Acolo", e.message)
+            emptyList()
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("Acolo", e.message)
+            emptyList()
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            Log.d("Acolo", e.toString())
+            emptyList()
+        }
+    }
+
+    override suspend fun removeFavCar(param: FavsParam): BaseResponse {
+        return try {
+            client.post{
+                url(HttpRoutes.REMOVE_FAV)
+                contentType(ContentType.Application.Json)
+                setBody(param)
+            }.body<BaseResponse>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error1", "Error")
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error2", "Error")
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error3", "Error")
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            BaseResponse("Error4", "Error")
+        }
+    }
+
+    override suspend fun isFav(param: FavsParam): BaseResponse {
+        return try {
+            client.post{
+                url(HttpRoutes.IS_FAV)
+                contentType(ContentType.Application.Json)
+                setBody(param)
+            }.body<BaseResponse>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error1", "Error")
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error2", "Error")
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            BaseResponse("Error3", "Error")
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            BaseResponse("Error4", "Error")
+        }
+    }
+
+    override suspend fun getCarsByMark(param: GetCarsByMark): List<CarDTO> {
+        return try {
+            client.post{
+                url(HttpRoutes.GET_CAR_BY_MARK)
+                contentType(ContentType.Application.Json)
+                setBody(param)
+            }.body<List<CarDTO>>()
+
+        } catch (e: RedirectResponseException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("Acolo", e.message)
+            emptyList()
+        } catch (e: ClientRequestException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("Acolo", e.message)
+            emptyList()
+        } catch (e: ServerResponseException) {
+            println("Error: ${e.response.status.description}")
+            Log.d("Acolo", e.message)
+            emptyList()
+        } catch (e: Exception) {
+            println("Error: ${e.message}")
+            Log.d("Acolo", e.toString())
             emptyList()
         }
     }
