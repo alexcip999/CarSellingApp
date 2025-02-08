@@ -7,8 +7,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.car_sellingapp.LoginScreen
 import com.example.car_sellingapp.model.AppViewModel
+import com.example.car_sellingapp.update_screens.ChangePasswordScreen
+import com.example.car_sellingapp.update_screens.LoginScreen
+import com.example.car_sellingapp.update_screens.PopUpChgPass
+import com.example.car_sellingapp.update_screens.PopUpChgRegister
+import com.example.car_sellingapp.update_screens.RegisterScreen
+import com.example.car_sellingapp.update_screens.VerifyScreen
 
 @Composable
 fun MainNavigation() {
@@ -20,34 +25,23 @@ fun MainNavigation() {
             LoginScreen(navController, appViewModel, appUiState)
         }
         composable(route = Routes.MainRoute.ForgotPassword.route) {
-            ForgotPasswordScreen(navController, appViewModel, appUiState)
+            ChangePasswordScreen(navController)
         }
         composable(route = Routes.MainRoute.SignUp.route) {
-            SignUpScreen(navController, appViewModel, appUiState)
+            RegisterScreen(navController, appViewModel, appUiState)
+        }
+        composable(route = Routes.MainRoute.Verify.route){
+            VerifyScreen(navController, appViewModel, appUiState)
+        }
+        composable(route = Routes.MainRoute.PopUpChgPass.route){
+            PopUpChgPass(navController)
+        }
+        composable(route = Routes.MainRoute.PopUpRegister.route){
+            PopUpChgRegister(navController)
         }
         composable(route = Routes.MainRoute.Home.route) {
-            HomeScreen(navController, appViewModel, appUiState)
+            HomeScreen()
         }
-        composable(route = Routes.MainRoute.Profile.route) {
-            ProfileScreen(navController, appViewModel, appUiState)
-        }
-        composable(route = Routes.MainRoute.UpdateProfile.route) {
-            UpdateDetailsAboutUserScreen(navController, appViewModel, appUiState)
-        }
-        composable(route = Routes.MainRoute.UploadCar.route) {
-            UploadCarScreen(navController, appViewModel, appUiState)
-        }
-        composable(route = Routes.MainRoute.CarDetails.route) {
-            CarDetailsScreen(navController, appViewModel, appUiState)
-        }
-        composable(route = Routes.MainRoute.FavoriteCars.route) {
-            FavScreen(navController, appViewModel, appUiState)
-        }
-        composable(route = Routes.MainRoute.YourPosts.route) {
-            YourPostsScreen(navController, appViewModel, appUiState)
-        }
-        composable(route = Routes.MainRoute.SearchCars.route) {
-            SearchCarsScreen(navController, appViewModel, appUiState)
-        }
+
     }
 }

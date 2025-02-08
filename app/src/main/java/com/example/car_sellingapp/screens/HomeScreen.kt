@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -47,101 +48,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.car_sellingapp.R
-import com.example.car_sellingapp.components.BottomBarComponent
-import com.example.car_sellingapp.components.CardSlider
-import com.example.car_sellingapp.components.SearchBar
 import com.example.car_sellingapp.model.AppUiState
 import com.example.car_sellingapp.model.AppViewModel
 
-val listOfMarks = listOf("Toyota", "Audi", "BMW", "Mercedes-Benz", "Ford")
-
 @Composable
-fun HomeScreen(
-    navController: NavController,
-    appViewModel: AppViewModel,
-    appUiState: AppUiState
-) {
-    Box(
-        modifier =
-        Modifier
-            .fillMaxSize(),
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.white),
-            contentDescription = "White Background",
-            modifier =
-            Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.Crop,
-        )
-    }
-
-    Column(
-        modifier =
-        Modifier
-            .padding(4.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Top
-    ) {
-        val text = remember { mutableStateOf("") }
-        Text(
-            text = "Featured",
-            fontSize = 30.sp,
-            fontStyle = FontStyle.Italic,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.Black,
-        )
-        Spacer(modifier = Modifier.padding(4.dp))
-        Text(
-            text = "6.046 Cars for Sale in USA",
-            fontSize = 20.sp,
-        )
-        Spacer(modifier = Modifier.padding(4.dp))
-        SearchBar(
-            text = appViewModel.searchCarsByMark,
-            hint = "Search",
-            onSearchClicked = { appViewModel.getCarsByMark()},
-            onTextChange = { appViewModel.updateSearchCarByMark(it) },
-            navController = navController
-        )
-
-        Spacer(modifier = Modifier.padding(4.dp))
-        LazyColumn(
-            modifier = Modifier
-                .height(650.dp)
-        ) {
-            items(listOfMarks) { mark ->
-                Spacer(modifier = Modifier.padding(8.dp))
-                Text(
-                    text = "Mark: $mark",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-                Spacer(modifier = Modifier.padding(8.dp))
-
-                // Filter cars by mark and display in CardSlider
-                val filteredCars = appUiState.allCars.filter { car -> car.mark == mark }
-                if (filteredCars.isNotEmpty()) {
-                    CardSlider(
-                        cards = filteredCars,
-                        navController = navController,
-                        appViewModel = appViewModel,
-                        appUiState = appUiState
-                    )
-                } else {
-                    Text(
-                        text = "No cars available for $mark",
-                        fontSize = 16.sp,
-                        color = Color.Gray,
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-            }
-
-        }
-        BottomBarComponent(navController, appViewModel, appUiState)
-    }
+@Preview
+fun HomeScreen(){
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(28.dp),
+        color = Color.White
+    ) {  }
 }
+
+
+
 
 

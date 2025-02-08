@@ -49,5 +49,17 @@ sealed class Routes(
         data object SearchCars : Routes("${MainRoute.route}/searchCars") {
             fun NavController.toSearchCars() = navigate("${MainRoute.route}/searchCars")
         }
+
+        data object Verify : Routes("${MainRoute.route}/verify"){
+            fun NavController.toVerify() = navigate("${MainRoute.route}/verify")
+        }
+
+        data object PopUpChgPass : Routes("${MainRoute.route}/chgPass"){
+            fun NavController.toChgPass() = navigate("${MainRoute.route}/chgPass")
+        }
+
+        data object PopUpRegister : Routes("${MainRoute.route}/popUpRegister"){
+            fun NavController.toPopUpRegister() = navigate("${MainRoute.route}/popUpRegister")
+        }
     }
 }

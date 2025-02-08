@@ -8,23 +8,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.car_sellingapp.data.remote.dto.CarDTO
-import com.example.car_sellingapp.data.remote.dto.CombustibleType
-import com.example.car_sellingapp.data.remote.dto.FavsParam
-import com.example.car_sellingapp.data.remote.dto.ForgotPasswordRequest
-import com.example.car_sellingapp.data.remote.dto.GetCarsByIdParam
-import com.example.car_sellingapp.data.remote.dto.GetCarsByMark
-import com.example.car_sellingapp.data.remote.dto.GetFavCarsById
-import com.example.car_sellingapp.data.remote.dto.GetUserByUsername
-import com.example.car_sellingapp.data.remote.dto.GetUserDetailsRequest
-import com.example.car_sellingapp.data.remote.dto.GetUserDetailsResponse
 import com.example.car_sellingapp.data.remote.dto.LoginRequest
-import com.example.car_sellingapp.data.remote.dto.ParamSaveDetailsAboutUser
 import com.example.car_sellingapp.data.remote.dto.RegisterRequest
-import com.example.car_sellingapp.data.remote.dto.UploadCarRequest
+import com.example.car_sellingapp.data.remote.dto.VerifyRequest
+import com.example.car_sellingapp.screens.Routes.MainRoute.ForgotPassword.toForgotPassword
 import com.example.car_sellingapp.screens.Routes.MainRoute.Home.toHome
 import com.example.car_sellingapp.screens.Routes.MainRoute.Login.toLogin
-import com.example.car_sellingapp.screens.Routes.MainRoute.Profile.toProfile
+import com.example.car_sellingapp.screens.Routes.MainRoute.PopUpChgPass.toChgPass
+import com.example.car_sellingapp.screens.Routes.MainRoute.PopUpRegister.toPopUpRegister
 import com.example.myapplication.data.remote.PostsService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,11 +29,12 @@ class AppViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
-    var loginUsername by mutableStateOf("")
+    // Login fields
+    var loginEmail by mutableStateOf("")
         private set
 
-    fun updateLoginUsername(username: String){
-        loginUsername = username
+    fun updateLoginEmail(email: String){
+        loginEmail = email
     }
 
     var loginPassword by mutableStateOf("")
@@ -52,11 +44,19 @@ class AppViewModel : ViewModel() {
         loginPassword = password
     }
 
-    var registerUsername by mutableStateOf("")
+    // Register fields
+    var registerName by mutableStateOf("")
         private set
 
-    fun updateRegisterUsername(username: String){
-        registerUsername = username
+    fun updateRegisterName(name: String){
+        registerName = name
+    }
+
+    var registerEmail by mutableStateOf("")
+        private set
+
+    fun updateRegisterEmail(email: String){
+        registerEmail = email
     }
 
     var registerPassword by mutableStateOf("")
@@ -73,387 +73,80 @@ class AppViewModel : ViewModel() {
         registerPasswordConfirmation = passwordConfirmation
     }
 
-    var forgotPassUsername by mutableStateOf("")
+    // Verify email field
+    var verifyEmail by mutableStateOf("")
         private set
 
-    fun updateForgotPassUsername(username: String){
-        forgotPassUsername = username
+    fun updateVerifyEmail(email: String){
+        verifyEmail = email
     }
 
-    var forgotPassNewPassword by mutableStateOf("")
-        private set
-
-    fun updateForgotPassNewPassword(newPassword: String){
-        forgotPassNewPassword = newPassword
-    }
-
-    var forgotPassConfirmPassword by mutableStateOf("")
-        private set
-
-    fun updateForgotPassConfirmPassword(confirmPassword: String){
-        forgotPassConfirmPassword = confirmPassword
-    }
-
-    var dataName by mutableStateOf("")
-        private set
-
-    fun updateDataName(name: String){
-        dataName = name
-    }
-
-    var dataCountry by mutableStateOf("")
-        private set
-
-    fun updateDataCountry(country: String){
-        dataCountry = country
-    }
-
-    var dataCity by mutableStateOf("")
-        private set
-
-    fun updateDataCity(city: String){
-        dataCity = city
-    }
-
-    var dataPhone by mutableStateOf("")
-        private set
-
-    fun updateDataPhone(phone: String){
-        dataPhone = phone
-    }
-
-    var uploadMark by mutableStateOf("")
-        private set
-
-    fun updateUploadMark(mark: String){
-        uploadMark = mark
-    }
-
-    var uploadSelectedCombustibleType by mutableStateOf(CombustibleType.GASOLINE)
-        private set
-
-    fun updateUploadCombustibleType(combustibleType: CombustibleType){
-        uploadSelectedCombustibleType = combustibleType
-    }
-
-    var uploadColor by mutableStateOf("")
-        private set
-
-    fun updateUploadColor(color: String){
-        uploadColor = color
-    }
-
-    var uploadModel by mutableStateOf("")
-        private set
-
-    fun updateUploadModel(model: String){
-        uploadModel = model
-    }
-
-    var uploadPower by mutableStateOf("")
-        private set
-
-    fun updateUploadPower(power: String){
-        uploadPower = power
-    }
-
-    var uploadPrice by mutableStateOf("")
-        private set
-
-    fun updateUploadPrice(price: String){
-        uploadPrice = price
-    }
-
-    var uploadYear by mutableStateOf("")
-        private set
-
-    fun updateUploadYear(year: String){
-        uploadYear = year
-    }
-
-    var uploadMileage by mutableStateOf("")
-        private set
-
-    fun updateUploadMileage(mileage: String){
-        uploadMileage = mileage
-    }
-
-    var uploadCapacity by mutableStateOf("")
-        private set
-
-    fun updateUploadCapacity(capacity: String){
-        uploadCapacity = capacity
-    }
-
-    var uploadDescription by mutableStateOf("")
-        private set
-
-    fun updateUploadDescription(description: String){
-        uploadDescription = description
-    }
-
-    var searchCarsByMark by mutableStateOf("")
-        private set
-
-    fun updateSearchCarByMark(mark: String){
-        searchCarsByMark = mark
-    }
-
-    fun getCarsByMark(){
-        val mark = GetCarsByMark(
-            mark = searchCarsByMark
+    fun verifyUser(navController: NavController){
+        val verifyRequest = VerifyRequest(
+            email = verifyEmail
         )
+
         viewModelScope.launch {
-            val searchCars = service.getCarsByMark(mark)
-            if (searchCars.isNotEmpty()){
+            val verifyResponse = service.verify(verifyRequest)
+            if (verifyResponse.data == "Invalid user email"){
                 _uiState.update { currentState ->
                     currentState.copy(
-                        searchCarsByMark = searchCars
+                        isVerifyWrong = true,
+                        currentErrorVerify = verifyResponse.data
                     )
                 }
-            }
-        }
-    }
-
-    fun getCarsById(){
-        val param = uiState.value.currentUser?.let {
-            GetCarsByIdParam(
-                userId = it.id
-            )
-        }
-
-        viewModelScope.launch {
-            val carsById = param?.let { service.getCarsById(it) }
-            Log.d("posts", carsById.toString())
-            if (carsById != null) {
-                if(carsById.isNotEmpty()){
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            yourPosts = carsById
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    fun removeFavCar(car: CarDTO){
-        val favsParam = car.id?.let {
-            uiState.value.currentUser?.let { it1 ->
-                FavsParam(
-                    userId = it1.id,
-                    carId = it
-                )
-            }
-        }
-        viewModelScope.launch {
-            val response = favsParam?.let { service.removeFavCar(it) }
-            if (response != null) {
-                if (response.message == "Success"){
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            isFavWrong = false
-                        )
-                    }
-                }else{
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            isFavWrong = true
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    fun isFav(car: CarDTO) {
-        val favsParam = car.id?.let {
-            uiState.value.currentUser?.let { it1 ->
-                FavsParam(
-                    userId = it1.id,
-                    carId = it
-                )
-            }
-        }
-
-        viewModelScope.launch {
-            val response = favsParam?.let { service.isFav(it) }
-            if (response != null) {
-                if (response.message == "Success"){
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            isFav = true
-                        )
-                    }
-                }else{
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            isFavWrong = false
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    fun getFavCars(){
-        val param = uiState.value.currentUser?.let {
-            GetFavCarsById(
-                userId = it.id
-            )
-        }
-        viewModelScope.launch {
-            val favCars = param?.let { service.getAllFavCArs(it) }
-            if (favCars != null) {
-                if (favCars.isNotEmpty()){
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            allFavCars = favCars
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    fun getAllCars(){
-        viewModelScope.launch {
-            val cars = service.getAllCars()
-            if (cars.isNotEmpty()){
+            }else{
                 _uiState.update { currentState ->
-                    currentState.copy(
-                        allCars = cars
-                    )
-                }
-            }
-        }
-    }
-
-    fun addFavCars(car: CarDTO){
-        val favsParam = car.id?.let {
-            uiState.value.currentUser?.let { it1 ->
-                FavsParam(
-                    userId = it1.id,
-                    carId = it
-                )
-            }
-        }
-        viewModelScope.launch {
-            val response = favsParam?.let { service.addFavCar(it) }
-            if (response != null) {
-                if (response.message == "Success"){
-                    _uiState.update { currentState ->
+                    verifyResponse.data?.let {
                         currentState.copy(
-                            isFavWrong = false
+                            isVerifyWrong = false,
+                            currentErrorVerify = it
                         )
-                    }
-                }else{
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                           isFavWrong = true
-                        )
-                    }
+                    }!!
                 }
-            }
-        }
-
-    }
-
-    fun setCurrentCar(car: CarDTO){
-        viewModelScope.launch {
-            _uiState.update { currentState ->
-                currentState.copy(
-                    currentCar = car
-                )
+                navController.toForgotPassword()
             }
         }
     }
-
-
-    fun uploadCar(navController: NavController){
-
-        val uploadCarRequest = uiState.value.currentUser?.let {
-            uiState.value.profileDetails?.name?.let { it1 ->
-                UploadCarRequest(
-                    idUser = it.id,
-                    year = uploadYear,
-                    km = uploadMileage,
-                    combustible = uploadSelectedCombustibleType,
-                    power = uploadPower,
-                    capacity = uploadCapacity,
-                    price = uploadPrice,
-                    description = uploadDescription,
-                    mark = uploadDescription,
-                    model = uploadModel,
-                    color = uploadColor,
-                    seller = it1,
-                    principalImageUri = "",
-                    secondaryImageUris = emptyList()
-                )
-            }
-        }
-
-        viewModelScope.launch {
-            if (uploadCarRequest != null){
-                val response = service.uploadCar(uploadCarRequest)
-                if (response.message == "Success"){
-                    _uiState.update { currentState ->
-                        currentState.copy(isUploadCarWrong = false)
-                    }
-                    navController.toHome()
-                }else{
-                    _uiState.update { currentState ->
-                        currentState.copy(isUploadCarWrong = true)
-                    }
-                }
-            }
-
-        }
-    }
-
 
     fun loginUser(navController: NavController){
         val loginRequest = LoginRequest(
-            username = loginUsername,
+            email = loginEmail,
             password = loginPassword
         )
 
         viewModelScope.launch {
             val loginResponse = service.login(loginRequest)
-            val cars = service.getAllCars()
             if (loginResponse.message == "Success"){
-                val getUserByUsername = service.getUserByUsername(
-                    GetUserByUsername(loginUsername)
-                ).data
-                if (getUserByUsername != null){
-                    val getDetailsAboutUser = service.getDetailsAboutUser(
-                        GetUserDetailsRequest(getUserByUsername.id)
-                    )
-                    if (getDetailsAboutUser.isNotEmpty()){
-                        _uiState.update { currentState ->
-                            currentState.copy(
-                                isLoginWrong = false,
-                                currentUser = getUserByUsername,
-                                profileDetails = getDetailsAboutUser[0],
-                                allCars = cars
-                            )
-                        }
-                    }else{
-                        _uiState.update { currentState ->
-                            currentState.copy(
-                                isLoginWrong = false,
-                                currentUser = getUserByUsername,
-                            )
-                        }
-                    }
-                    navController.toHome()
-                }
-
-            }else{
                 _uiState.update { currentState ->
                     currentState.copy(
-                        isLoginWrong = true
+                        isLoginWrong = false,
+                        isLoginEmailWrong = false,
+                        isLoginPassWrong = false
                     )
+                }
+                updateLoginEmail("")
+                updateLoginPassword("")
+                navController.toHome()
+            }else{
+                if (loginResponse.data == "Wrong Password"){
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isLoginWrong = true,
+                            isLoginPassWrong = true,
+                            isLoginEmailWrong = false,
+                            currentErrorLogin = loginResponse.data.toString()
+                        )
+                    }
+                }else{
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isLoginWrong = true,
+                            isLoginEmailWrong = true,
+                            isLoginPassWrong = false,
+                            currentErrorLogin = loginResponse.data.toString()
+                        )
+                    }
                 }
             }
         }
@@ -461,108 +154,97 @@ class AppViewModel : ViewModel() {
 
     fun registerUser(navController: NavController) {
         val registerRequest = RegisterRequest(
-            username = registerUsername,
+            name = registerName,
+            email = registerEmail,
             password = registerPassword,
             passwordConfirmation = registerPasswordConfirmation
         )
 
         viewModelScope.launch {
-            val registerResponse = service.register(registerRequest)
+            if(registerPassword.isNotEmpty() && registerPasswordConfirmation.isNotEmpty()){
+                val registerResponse = service.register(registerRequest)
 
-            if (registerResponse.message == "Success"){
-                _uiState.update { currentState ->
-                    currentState.copy(isRegisterWrong = false)
-                }
-                navController.toLogin()
-            }else{
-                _uiState.update { currentState ->
-                    currentState.copy(isRegisterWrong = true)
-                }
-            }
-        }
-    }
-
-    fun forgotPassword(navController: NavController){
-        val forgotPasswordRequest = ForgotPasswordRequest(
-            username = forgotPassUsername,
-            password = forgotPassNewPassword,
-            passwordConfirmation = forgotPassConfirmPassword
-        )
-
-        viewModelScope.launch {
-            val forgotPassResponse = service.forgotPassword(forgotPasswordRequest)
-
-            if (forgotPassResponse.message == "Success"){
-                _uiState.update { currentState ->
-                    currentState.copy(isForgotPasswordWrong = false)
-                }
-                navController.toLogin()
-            }else{
-                _uiState.update { currentState ->
-                    currentState.copy(isForgotPasswordWrong = true)
-                }
-            }
-        }
-    }
-
-    fun saveDetailsAboutUser(navController: NavController) {
-        val saveDetails = uiState.value.currentUser?.let {
-            ParamSaveDetailsAboutUser(
-                userId = it.id,
-                name = dataName,
-                country = dataCountry,
-                city = dataCity,
-                phone = dataPhone,
-                profileImageUri = ""
-            )
-        }
-
-        if (saveDetails == null) {
-            Log.d("SaveDetails", "saveDetails is null, cannot proceed.")
-            return
-        }
-
-        viewModelScope.launch {
-            try {
-                val response = service.saveDetailsAboutUser(saveDetails)
-
-                if (response.message == "Success") {
-                    val getUserDetailsResponse = GetUserDetailsResponse(
-                        userId = saveDetails.userId,
-                        name = saveDetails.name,
-                        country = saveDetails.country,
-                        city = saveDetails.city,
-                        phone = saveDetails.phone,
-                        profileImageUri = saveDetails.profileImageUri
-                    )
-
+                if (registerResponse.message == "Success"){
                     _uiState.update { currentState ->
-                        currentState.copy(
-                            isUpdateWrong = false,
-                            profileDetails = getUserDetailsResponse
-                        )
+                        currentState.copy(isRegisterWrong = false)
                     }
+                    updateRegisterName("")
+                    updateRegisterEmail("")
+                    updateRegisterPassword("")
+                    updateRegisterPasswordConfirmation("")
 
-                    navController.toProfile()
-                } else {
-                    Log.d("SaveDetails", "Error in response: ${response.message}")
+                    navController.toPopUpRegister()
+                }else{
+                    if (registerResponse.data == "Username already exists"){
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                isRegisterWrong = true,
+                                isRegisterEmailInvalid = false,
+                                isRegisterNameWrong = true,
+                                isRegisterEmailWrong = false,
+                                isRegisterPasswordsWrong = false,
+                                currentErrorRegister = registerResponse.data.toString()
+                            )
+                        }
+                    }else{
+                        if (registerResponse.data == "Passwords do not match"){
+                            _uiState.update { currentState ->
+                                currentState.copy(
+                                    isRegisterWrong = true,
+                                    isRegisterEmailInvalid = false,
+                                    isRegisterNameWrong = false,
+                                    isRegisterEmailWrong = false,
+                                    isRegisterPasswordsWrong = true,
+                                    currentErrorRegister = registerResponse.data.toString()
+                                )
+                            }
+                        }else{
+                            if (registerResponse.data == "Invalid email format"){
+                                _uiState.update { currentState ->
+                                    currentState.copy(
+                                        isRegisterWrong = true,
+                                        isRegisterEmailInvalid = true,
+                                        isRegisterNameWrong = false,
+                                        isRegisterEmailWrong = false,
+                                        isRegisterPasswordsWrong = false,
+                                        currentErrorRegister = registerResponse.data.toString()
+                                    )
+                                }
+                            }else{
+                                _uiState.update { currentState ->
+                                    currentState.copy(
+                                        isRegisterWrong = true,
+                                        isRegisterEmailInvalid = false,
+                                        isRegisterNameWrong = false,
+                                        isRegisterEmailWrong = true,
+                                        isRegisterPasswordsWrong = false,
+                                        currentErrorRegister = registerResponse.data.toString()
+                                    )
+                                }
+                            }
+                        }
+
+                    }
                     _uiState.update { currentState ->
                         currentState.copy(
-                            isUpdateWrong = true,
+                            isRegisterWrong = true,
+                            currentErrorRegister = registerResponse.data.toString()
                         )
                     }
                 }
-            } catch (e: Exception) {
-                Log.e("SaveDetails", "Error occurred: ${e.message}")
+            }else{
                 _uiState.update { currentState ->
                     currentState.copy(
-                        isUpdateWrong = true,
+                        isRegisterWrong = true,
+                        isRegisterEmailInvalid = false,
+                        isRegisterNameWrong = false,
+                        isRegisterEmailWrong = false,
+                        isRegisterPasswordsWrong = true,
+                        currentErrorRegister = "Empty passwords fields"
                     )
                 }
             }
         }
     }
-
-
 
 }
